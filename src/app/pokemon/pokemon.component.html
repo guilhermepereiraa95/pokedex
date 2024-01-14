@@ -1,0 +1,22 @@
+<input [(ngModel)]="pokemonName" placeholder="bulbasaur" class="form-control" (keyup)="loadPokemon()" />
+<div class="col" *ngIf="pokemon">
+  <div class="d-flex justify-content-center" *ngFor="let pokemon of pokemon">
+    <div class="card mt-5">
+      <img [src]="pokemon.sprites.front_default" alt="{{ pokemon.name }}" class="img-fluid">
+      <div class="card-body">
+        <h5 class="card-title text-center">{{ pokemon.name }}</h5>
+        <div class="card-text">
+          <div *ngFor="let type of pokemon.types" class="d-flex m-1">
+            <span class="badge bg-primary">{{ type.type.name }}</span>
+          </div>
+          <ul class="list-group">
+            <li class="list-group-item">Weight: {{pokemon.weight}}</li>
+
+            <li class="list-group-item">Height: {{pokemon.height}}</li>
+
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

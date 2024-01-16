@@ -1,4 +1,6 @@
-<input [(ngModel)]="pokemonName" placeholder="bulbasaur" class="form-control" (keyup)="loadPokemon()" />
+<form [formGroup]="searchForm">
+  <input id="searchQuery" formControlName="searchQuery" placeholder="bulbasaur" class="form-control" />
+</form>
 <div class="col" *ngIf="pokemon">
   <div class="d-flex justify-content-center" *ngFor="let pokemon of pokemon">
     <div class="card mt-5">

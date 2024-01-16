@@ -31,7 +31,7 @@ export class PokemonComponent {
         }),
         switchMap(() => {
           return this.pokemonService.getPokemon(
-            this.searchForm.get('searchQuery').value
+            String(this.searchForm.get('searchQuery').value).toLocaleLowerCase()
             ).pipe(
               catchError(() => {
                 return of(null); // Return an empty observable to continue the chain

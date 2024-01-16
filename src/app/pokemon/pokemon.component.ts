@@ -25,7 +25,10 @@ export class PokemonComponent {
       .valueChanges.pipe(
         debounceTime(800), // Wait for 800ms pause in events
         distinctUntilChanged(), // Only emit when the current value is different from the last
-        tap(() => (this.loading = true)),
+        tap(() => {
+          this.loading = true;
+          this.pokemon = null;
+        }),
         switchMap(() => {
           return this.pokemonService.getPokemon(
             this.searchForm.get('searchQuery').value
@@ -40,8 +43,6 @@ export class PokemonComponent {
       .subscribe((data: any) => {
         if (data) {
           this.pokemon = data;
-        } else {
-          this.pokemon = null;
         }
         this.loading = false;
       }),

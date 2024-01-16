@@ -2,7 +2,7 @@
   <input id="searchQuery" formControlName="searchQuery" placeholder="bulbasaur" class="form-control" />
 </form>
 <div class="col" *ngIf="pokemon">
-  <div class="d-flex justify-content-center" *ngFor="let pokemon of pokemon">
+  <div class="d-flex justify-content-center">
     <div class="card mt-5">
       <img [src]="pokemon.sprites.front_default" alt="{{ pokemon.name }}" class="img-fluid">
       <div class="card-body">
@@ -21,4 +21,7 @@
       </div>
     </div>
   </div>
+</div>
+<div class="col d-flex justify-content-center p-5" *ngIf="loading">
+  <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
 </div>

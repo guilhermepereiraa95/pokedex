@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { PokemonService } from '../pokemon.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-pokemon',
   templateUrl: './pokemon.component.html',
 })
 export class PokemonComponent {
-  pokemon: any = [];
+  pokemon: any;
   searchForm: any;
+  loading = false;
 
   constructor(
     private pokemonService: PokemonService,
@@ -22,19 +23,23 @@ export class PokemonComponent {
     this.searchForm
       .get('searchQuery')
       .valueChanges.pipe(
-        debounceTime(1000), // Wait for 300ms pause in events
+        debounceTime(800), // Wait for 300ms pause in events
         distinctUntilChanged(), // Only emit when the current value is different from the last
-        switchMap(() =>
-          this.pokemonService.getPokemon(
+        tap(() => (this.loading = true)),
+        switchMap(() => {
+          this.loading = true;
+          this.pokemon = null;
+          return this.pokemonService.getPokemon(
             this.searchForm.get('searchQuery').value
+            ) }// Make the API call
           )
-        ) // Make the API call
       )
       .subscribe((data: any) => {
         console.log(data);
         if (data) {
-          this.pokemon = [data];
+          this.pokemon = data;
         }
+        this.loading = false;
       });
   }
 }

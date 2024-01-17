@@ -1,0 +1,7 @@
+<div class="row mt-5" *ngIf="pokemonList">
+  <div class="col-3" *ngFor="let pokemon of pokemonList">
+    <div class="card m-1">
+      <h5 class="card-text text-center">{{ pokemon.name }}</h5>
+    </div>
+  </div>
+</div>

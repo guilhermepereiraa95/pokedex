@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { PokemonService } from 'src/app/pokemon.service';
 
 @Component({
   selector: 'app-pokemon-card',
@@ -7,4 +8,5 @@ import { Component, Input } from '@angular/core';
 })
 export class PokemonCardComponent {
   @Input() pokemon: any = null;
+  constructor() { }
 }

@@ -1,33 +1,26 @@
+<div class="border rounded p-5">
 
-<div class="card p-5">
+  <form [formGroup]="searchForm">
+    <input id="searchQuery" formControlName="searchQuery" placeholder="bulbasaur" class="form-control" />
+  </form>
 
-<form [formGroup]="searchForm">
-  <input id="searchQuery" formControlName="searchQuery" placeholder="bulbasaur" class="form-control" />
-</form>
-<div class="col d-flex justify-content-center p-5" *ngIf="!pokemon && !loading">Who is this Pokemon? </div>
-<div class="col" *ngIf="pokemon">
-  <div class="d-flex justify-content-center">
-    <div class="card mt-5">
-      <img [src]="pokemon.sprites.front_default" alt="{{ pokemon.name }}" class="img-fluid">
-      <div class="card-body">
-        <h5 class="card-title text-center">{{ pokemon.name }}</h5>
-        <div class="card-text">
-          <div *ngFor="let type of pokemon.types" class="d-flex m-1">
-            <span class="badge bg-primary">{{ type.type.name }}</span>
-          </div>
-          <ul class="list-group">
-            <li class="list-group-item">Weight: {{pokemon.weight}}</li>
+  <app-pokemon-card [pokemon]="pokemon"></app-pokemon-card>
 
-            <li class="list-group-item">Height: {{pokemon.height}}</li>
+  <app-pokemon-list (setName)="setName($event)" [pokemonList]="pokemon?.results"></app-pokemon-list>
 
-          </ul>
-        </div>
-      </div>
-    </div>
+  <div class="col d-flex justify-content-center p-5" *ngIf="loading">
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
   </div>
-</div>
-<div class="col d-flex justify-content-center p-5" *ngIf="loading">
-  <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+
+  <p class="text-center mt-5" *ngIf="!pokemon && !loading">Search a valid name for your fav pokemon!</p>
 </div>
 
-</div>
+<mat-paginator
+*ngIf="pokemon?.results"
+[pageSize]="pageSize"
+[pageIndex]="pageIndex"
+[pageSizeOptions]="pageSizeOptions"
+(page)="onPageChange($event)"
+showFirstLastButtons
+></mat-paginator>
+

@@ -1,38 +1,47 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { PokemonService } from '../pokemon.service';
 import { FormBuilder } from '@angular/forms';
-import { catchError, debounceTime, distinctUntilChanged, of, switchMap, tap } from 'rxjs';
+import { catchError, debounceTime, of, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-pokemon',
   templateUrl: './pokemon.component.html',
 })
 export class PokemonComponent {
-  pokemon: any;
+  pokemon: any  = '';
   searchForm: any;
   loading = false;
+  pageSize = 25;
+  pageIndex = 0;
+  pageSizeOptions: number[] = [5, 10, 25, 100, 200];
 
   constructor(
     private pokemonService: PokemonService,
     private formBuilder: FormBuilder
   ) {
     this.searchForm = this.formBuilder.group({
-      searchQuery: [null],
+      searchQuery: [''],
     });
 
+    this.searchValueChange();
+  }
+
+  searchValueChange(): void {
     this.searchForm
       .get('searchQuery')
-      .valueChanges.pipe(
-        debounceTime(800), // Wait for 800ms pause in events
-        distinctUntilChanged(), // Only emit when the current value is different from the last
+      .valueChanges
+      .pipe(
+        debounceTime(800),
         tap(() => {
           this.loading = true;
           this.pokemon = null;
         }),
-        switchMap(() => {
-          return this.pokemonService.getPokemon(
-            String(this.searchForm.get('searchQuery').value).toLocaleLowerCase()
-            ).pipe(
+        switchMap((value: string) => {
+          return this.pokemonService.getPokemon(value.toLocaleLowerCase(), {
+            offset: this.pageIndex,
+            limit: this.pageSize
+          })
+          .pipe(
               catchError(() => {
                 return of(null); // Return an empty observable to continue the chain
               })
@@ -41,13 +50,18 @@ export class PokemonComponent {
         )
       )
       .subscribe((data: any) => {
-        if (data) {
-          this.pokemon = data;
-        }
+        this.pokemon = data ? data : null;
         this.loading = false;
-      }),
-      (error: any) => {
-        console.log(error)
-      };
+      });
+  }
+
+  setName(name: string): void {
+    this.searchForm.get('searchQuery').setValue(name.toLocaleLowerCase());
+  }
+
+  onPageChange(event: any): void {
+    this.pageSize = event.pageSize;
+    this.pageIndex = event.pageIndex;
+    this.searchForm.get('searchQuery').setValue('');
   }
 }

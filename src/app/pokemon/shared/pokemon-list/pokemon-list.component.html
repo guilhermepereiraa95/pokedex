@@ -1,7 +1,9 @@
 <div class="row mt-5" *ngIf="pokemonList">
   <div class="col-3" *ngFor="let pokemon of pokemonList">
     <div class="card m-3">
-      <h5 class="card-text text-center">{{ pokemon.name }}</h5>
+    <button class="btn" (click)="setSearchName(pokemon.name)">
+        <div class="card-body text-center">{{ pokemon.name }}</div>
+      </button>
     </div>
   </div>
 </div>

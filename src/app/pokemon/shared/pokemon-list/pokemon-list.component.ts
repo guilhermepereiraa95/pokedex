@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { PokemonService } from 'src/app/pokemon.service';
 
 @Component({
@@ -8,7 +9,11 @@ import { PokemonService } from 'src/app/pokemon.service';
 })
 export class PokemonListComponent {
   @Input() pokemonList: any[] = [];
-  constructor(private pokemonService: PokemonService) {
+  @Output() setName = new EventEmitter<string>();
 
+  constructor() {  }
+
+  setSearchName(name: any) {
+    this.setName.emit(name)
   }
 }

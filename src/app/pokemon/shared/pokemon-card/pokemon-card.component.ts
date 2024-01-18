@@ -8,4 +8,8 @@ import { Component, Input } from '@angular/core';
 export class PokemonCardComponent {
   @Input() pokemon: any = null;
   constructor() { }
+
+  onDetail(): void {
+    console.log(this.pokemon.id)
+  }
 }

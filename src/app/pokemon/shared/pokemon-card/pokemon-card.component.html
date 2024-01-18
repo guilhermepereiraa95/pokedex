@@ -1,17 +1,20 @@
 <div class="col" *ngIf="pokemon && !pokemon?.results">
   <div class="d-flex justify-content-center m-5">
     <div class="card">
-      <img [src]="pokemon.sprites.front_default" alt="{{ pokemon.name }}" class="card-img-top img-fluid border rounded">
-      <div class="card-body">
-        <h5 class="card-title text-center">{{ pokemon.name }}</h5>
-        <div class="container">
-          <div class="d-flex flex-wrap justify-content-center">
-            <span *ngFor="let type of pokemon.types" class="badge bg-primary m-1">{{ type.type.name }}</span>
+    <button class="btn btn-light" (click)="onDetail()">
+        <img [src]="pokemon.sprites.front_default" alt="{{ pokemon.name }}"
+          class="card-img-top img-fluid border rounded">
+        <div class="card-body">
+          <h5 class="card-title text-center">{{ pokemon.name }}</h5>
+          <div class="container">
+            <div class="d-flex flex-wrap justify-content-center">
+              <span *ngFor="let type of pokemon.types" class="badge bg-primary m-1">{{ type.type.name }}</span>
+            </div>
           </div>
+          <p class="card-text">Weight: {{pokemon.weight}}</p>
+          <p class="card-text">Height: {{pokemon.height}}</p>
         </div>
-        <p class="card-text">Weight: {{pokemon.weight}}</p>
-        <p class="card-text">Height: {{pokemon.height}}</p>
-      </div>
+      </button>
     </div>
   </div>
 </div>

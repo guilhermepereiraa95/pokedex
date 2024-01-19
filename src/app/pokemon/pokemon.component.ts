@@ -11,7 +11,7 @@ export class PokemonComponent {
   pokemon: any  = '';
   searchForm: any;
   loading = false;
-  pageSize = 25;
+  pageSize = 10;
   pageIndex = 0;
   pageSizeOptions: number[] = [5, 10, 25, 100, 200];
 

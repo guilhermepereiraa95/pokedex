@@ -10,6 +10,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { PokemonListComponent } from './pokemon/shared/pokemon-list/pokemon-list.component';
 import { PokemonCardComponent } from './pokemon/shared/pokemon-card/pokemon-card.component';
+import { PokemonDetailComponent } from './pokemon/shared/pokemon-detail/pokemon-detail.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { PokemonCardComponent } from './pokemon/shared/pokemon-card/pokemon-card
     AppComponent,
     PokemonComponent,
     PokemonListComponent,
-    PokemonCardComponent
+    PokemonCardComponent,
+    PokemonDetailComponent
   ],
   imports: [
     BrowserModule,

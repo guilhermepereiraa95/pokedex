@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, Output } from '@angular/core';
 
 @Component({
   selector: 'app-pokemon-card',
@@ -7,9 +7,11 @@ import { Component, Input } from '@angular/core';
 })
 export class PokemonCardComponent {
   @Input() pokemon: any = null;
+  @Output() pokemonDetails: any = null;
   constructor() { }
 
   onDetail(): void {
-    console.log(this.pokemon.id)
+    this.pokemonDetails = this.pokemon;
+    this.pokemon = null;
   }
 }

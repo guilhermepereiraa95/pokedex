@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, Output } from '@angular/core';
+import { Component, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-pokemon-card',
@@ -7,7 +7,7 @@ import { Component, Input, OnChanges, Output } from '@angular/core';
 })
 export class PokemonCardComponent {
   @Input() pokemon: any = null;
-  @Output() pokemonDetails: any = null;
+  pokemonDetails: any = null;
   constructor() { }
 
   onDetail(): void {

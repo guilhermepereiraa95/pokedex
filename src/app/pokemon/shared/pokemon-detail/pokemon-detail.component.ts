@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./pokemon-detail.component.scss']
 })
 export class PokemonDetailComponent {
-  @Input() pokemon: any = null;
+  @Input() pokemonDetails: any = null;
   constructor() { }
 
 }

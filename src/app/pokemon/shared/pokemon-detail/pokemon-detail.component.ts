@@ -35,15 +35,22 @@ export class PokemonDetailComponent implements OnChanges {
           return of(null); // Return an observable with a default value (e.g., null) in case of an error
         })
       )
-      .subscribe((evolution: any) => {
-
+      .subscribe({
+        next: (evolution: any) => {
+        if(!evolution) {
+          return;
+        }
         const evolutionNames = this.extractEvolutionNames(evolution.chain);
         this.evolutions = evolutionNames;
 
         evolutionNames.forEach((element: string, i: number) => {
           this.getEvolutionImages(element, i);
         });
-      });
+      },
+      complete: () => {
+        this.loading = false;
+      },
+    });
   }
 
   extractEvolutionNames(evolution: any, result: any[] = []): any {

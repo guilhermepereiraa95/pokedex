@@ -1,13 +1,16 @@
 <div *ngIf="pokemonDetails" class="col-12">
-  <h2 class="text-center mt-3">XP: {{ pokemonDetails.base_experience ? pokemonDetails.base_experience : 'Unknown' }}</h2>
+  <h2 class="text-center mt-3">XP: {{ pokemonDetails.base_experience ? pokemonDetails.base_experience : 'Unknown' }}
+  </h2>
   <div class="d-flex justify-content-center m-3">
     <div class="card p-3">
-      <img [src]="pokemonDetails.sprites.front_default" alt="{{ pokemonDetails.name }}" class="img-fluid border rounded">
+      <img [src]="pokemonDetails.sprites.front_default" alt="{{ pokemonDetails.name }}"
+        class="img-fluid border rounded">
       <div class="card-body">
         <h5 class="card-title text-center">{{ pokemonDetails.name }}</h5>
         <div class="container">
           <div class="d-flex flex-wrap justify-content-center">
-            <span *ngFor="let type of pokemonDetails.types" class="badge m-1 {{type.type.name}}">{{ type.type.name }}</span>
+            <span *ngFor="let type of pokemonDetails.types" class="badge m-1 {{type.type.name}}">{{ type.type.name
+              }}</span>
           </div>
         </div>
         <div class="card-text">
@@ -42,17 +45,22 @@
         </div>
       </div>
     </div>
-</div>
-<h4 class="text-center mt-3">Forms:</h4>
-<div class="container">
-  <div class="d-flex flex-wrap">
-    <div *ngFor="let forms of pokemonDetails.forms" class="col-3">
-      <div class="card m-1">
-        <img [src]="pokemonDetails.sprites.front_default" alt="{{ forms.name }}" class="img-fluid border rounded">
-        <div class="card-body">
-          <p>{{ forms.name }}</p>
-        </div>
+  </div>
+
+  <div class="col d-flex justify-content-center p-5" *ngIf="loading">
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+  </div>
+  <div class="container" *ngIf="!loading">
+    <h4 class="text-center m-3">Evolutions:</h4>
+    <div class="d-flex flex-wrap justify-content-center">
+      <div *ngFor="let evolution of evolutions; let i = index;" class="col-3 m-2">
+        <div class="card">
+          <button class="btn" (click)="setNameDetail(evolution)">
+            <img [src]="this.evolutionPic[i]" alt="{{ evolution }}" class="img-fluid">
+            <div class="card-body">
+              <p>{{ evolution }}</p>
+            </div>
+          </button>
       </div>
     </div>
-</div>
-</div>
+  </div>

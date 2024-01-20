@@ -21,4 +21,4 @@
   </div>
 </div>
 
-<app-pokemon-detail *ngIf="pokemonDetails && !loading && !pokemon?.results && !pokemon" [pokemonDetails]="pokemonDetails"></app-pokemon-detail>
+<app-pokemon-detail *ngIf="pokemonDetails && !loading && !pokemon?.results && !pokemon" (setName)="setNameEvent($event)" [pokemonDetails]="pokemonDetails"></app-pokemon-detail>

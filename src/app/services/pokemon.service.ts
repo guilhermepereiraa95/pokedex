@@ -18,6 +18,9 @@ export class PokemonService {
     ).pipe(delay(1000));
   }
 
+  // it wasnt needed to use these apis, as everything is beeing made by the same api call above
+  // but ill let these apis calls commented bellow
+
   // getPokemonList(pagination: string): Observable<any> {
   //   return this.http.get(`${this.apiUrl}/${pagination}`).pipe(delay(1000));
   // }

@@ -1,4 +1,4 @@
-import { Component, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-pokemon-card',
@@ -9,7 +9,12 @@ export class PokemonCardComponent {
   @Input() pokemon: any = null;
   @Input() loading = false;
   pokemonDetails: any = null;
+  @Output() setName = new EventEmitter<string>();
   constructor() { }
+
+  setNameEvent(event: any): void {
+    this.setName.emit(event);
+  }
 
   onDetail(): void {
     this.pokemonDetails = this.pokemon;

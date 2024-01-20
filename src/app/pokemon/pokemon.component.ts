@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PokemonService } from '../pokemon.service';
+import { PokemonService } from '../services/pokemon.service';
 import { FormBuilder } from '@angular/forms';
 import { catchError, debounceTime, of, switchMap, tap } from 'rxjs';
 

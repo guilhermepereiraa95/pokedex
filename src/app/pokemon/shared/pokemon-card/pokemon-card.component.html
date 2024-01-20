@@ -11,8 +11,10 @@
               <span *ngFor="let type of pokemon.types" class="badge m-1  {{type.type.name}}">{{ type.type.name }}</span>
             </div>
           </div>
-          <p class="card-text">Weight: {{pokemon.weight}}</p>
-          <p class="card-text">Height: {{pokemon.height}}</p>
+          <div class="card-text">
+            <p>Height: {{ pokemon.height }} dm</p>
+            <p>Weight: {{ pokemon.weight }} oz</p>
+          </div>
         </div>
       </button>
     </div>

@@ -44,14 +44,15 @@
     </div>
 </div>
 <h4 class="text-center mt-3">Forms:</h4>
-
 <div class="container">
-  <div *ngFor="let forms of pokemonDetails.forms">
-    <div class="card col-3 p-3">
-      <img [src]="pokemonDetails.sprites.front_default" alt="{{ forms.name }}" class="img-fluid border rounded">
-      <div class="card-body">
-        <p>{{ forms.name }}</p>
+  <div class="d-flex flex-wrap">
+    <div *ngFor="let forms of pokemonDetails.forms" class="col-3">
+      <div class="card m-1">
+        <img [src]="pokemonDetails.sprites.front_default" alt="{{ forms.name }}" class="img-fluid border rounded">
+        <div class="card-body">
+          <p>{{ forms.name }}</p>
+        </div>
       </div>
     </div>
-  </div>
+</div>
 </div>

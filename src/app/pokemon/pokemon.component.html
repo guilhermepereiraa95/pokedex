@@ -4,7 +4,7 @@
     <input id="searchQuery" formControlName="searchQuery" placeholder="charizard" class="form-control" />
   </form>
 
-  <app-pokemon-card [pokemon]="pokemon"></app-pokemon-card>
+  <app-pokemon-card *ngIf="pokemon" [pokemon]="pokemon" [loading]="loading"></app-pokemon-card>
 
   <app-pokemon-list (setName)="setName($event)" [pokemonList]="pokemon?.results"></app-pokemon-list>
 

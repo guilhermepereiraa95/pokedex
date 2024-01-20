@@ -1,1 +1,57 @@
-<h1 *ngIf="this.pokemonDetails">pokemon-detail works!</h1>
+<div *ngIf="pokemonDetails" class="col-12">
+  <h2 class="text-center mt-3">XP: {{ pokemonDetails.base_experience ? pokemonDetails.base_experience : 'Unknown' }}</h2>
+  <div class="d-flex justify-content-center m-3">
+    <div class="card p-3">
+      <img [src]="pokemonDetails.sprites.front_default" alt="{{ pokemonDetails.name }}" class="img-fluid border rounded">
+      <div class="card-body">
+        <h5 class="card-title text-center">{{ pokemonDetails.name }}</h5>
+        <div class="container">
+          <div class="d-flex flex-wrap justify-content-center">
+            <span *ngFor="let type of pokemonDetails.types" class="badge m-1 {{type.type.name}}">{{ type.type.name }}</span>
+          </div>
+        </div>
+        <div class="card-text">
+          <p>Height: {{ pokemonDetails.height }} dm</p>
+          <p>Weight: {{ pokemonDetails.weight }} oz</p>
+          <div class="mb-3">
+            <h6>Abilities:</h6>
+            <ul>
+              <li *ngFor="let ability of pokemonDetails.abilities">
+                {{ ability.ability.name }} ({{ ability.is_hidden ? 'Hidden' : 'Slot ' + ability.slot }})
+              </li>
+            </ul>
+          </div>
+
+          <h6>Stats:</h6>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Stat</th>
+                <th scope="col">Base Stat</th>
+                <th scope="col">Effort</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let stat of pokemonDetails.stats">
+                <td>{{ stat.stat.name }}</td>
+                <td>{{ stat.base_stat }}</td>
+                <td>{{ stat.effort }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+</div>
+<h4 class="text-center mt-3">Forms:</h4>
+
+<div class="container">
+  <div *ngFor="let forms of pokemonDetails.forms">
+    <div class="card col-3 p-3">
+      <img [src]="pokemonDetails.sprites.front_default" alt="{{ forms.name }}" class="img-fluid border rounded">
+      <div class="card-body">
+        <p>{{ forms.name }}</p>
+      </div>
+    </div>
+  </div>
+</div>

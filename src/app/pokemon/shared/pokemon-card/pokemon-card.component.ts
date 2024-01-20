@@ -7,6 +7,7 @@ import { Component, Input, Output } from '@angular/core';
 })
 export class PokemonCardComponent {
   @Input() pokemon: any = null;
+  @Input() loading = false;
   pokemonDetails: any = null;
   constructor() { }
 

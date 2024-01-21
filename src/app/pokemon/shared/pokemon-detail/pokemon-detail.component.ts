@@ -1,6 +1,6 @@
 import { PokemonService } from './../../../services/pokemon.service';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
-import { catchError, of, switchMap } from 'rxjs';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import { Subject, catchError, delay, of, switchMap, takeUntil } from 'rxjs';
 import { EvolutionsService } from 'src/app/services/evolution.service';
 import { SpeciesService } from 'src/app/services/species.service';
 
@@ -10,12 +10,13 @@ import { SpeciesService } from 'src/app/services/species.service';
   styleUrls: ['./pokemon-detail.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PokemonDetailComponent implements OnChanges {
+export class PokemonDetailComponent implements OnChanges, OnDestroy {
   @Input() pokemonDetails: any = null;
   @Output() setName = new EventEmitter<string>();
   evolutions: any;
   evolutionPic: any[] = [];
   loading = false;
+  protected unsubscribeAll = new Subject<boolean>();
 
   constructor(
     private speciesService: SpeciesService,
@@ -29,18 +30,19 @@ export class PokemonDetailComponent implements OnChanges {
 
     this.speciesService.getSpecie(this.pokemonDetails.species.url)
       .pipe(
+        takeUntil(this.unsubscribeAll),
         switchMap(specie => this.evolutionService.getEvolution(specie.evolution_chain.url)),
         catchError(error => {
           console.error('Error fetching data:', error);
-          return of(null); // Return an observable with a default value (e.g., null) in case of an error
+          return of(null);
         })
       )
       .subscribe({
-        next: (evolution: any) => {
+        next: async (evolution: any) => {
         if(!evolution) {
           return;
         }
-        const evolutionNames = this.extractEvolutionNames(evolution.chain);
+        const evolutionNames = await this.extractEvolutionNames(evolution.chain);
         this.evolutions = evolutionNames;
 
         evolutionNames.forEach((element: string, i: number) => {
@@ -51,6 +53,10 @@ export class PokemonDetailComponent implements OnChanges {
         this.loading = false;
       },
     });
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribeAll.next(true);
   }
 
   extractEvolutionNames(evolution: any, result: any[] = []): any {
@@ -69,7 +75,12 @@ export class PokemonDetailComponent implements OnChanges {
   }
 
   getEvolutionImages(speciesName: string, i: number): void {
-    this.pokemonService.getPokemon(speciesName)
+    this.pokemonService
+    .getPokemon(speciesName)
+    .pipe(
+        takeUntil(this.unsubscribeAll),
+        delay(1000)
+      )
       .subscribe({
         next: (value) => {
           if (value && value.sprites && value.sprites.front_default) {

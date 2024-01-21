@@ -1,19 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { PokemonService } from '../services/pokemon.service';
 import { FormBuilder } from '@angular/forms';
-import { catchError, debounceTime, of, switchMap, tap } from 'rxjs';
+import { Subject, catchError, debounceTime, of, switchMap, takeUntil, tap } from 'rxjs';
 
 @Component({
   selector: 'app-pokemon',
   templateUrl: './pokemon.component.html',
 })
-export class PokemonComponent {
+export class PokemonComponent implements OnDestroy {
   pokemon: any  = '';
   searchForm: any;
   loading = false;
   pageSize = 10;
   pageIndex = 0;
   pageSizeOptions: number[] = [5, 10, 25, 100, 200];
+  protected unsubscribeAll = new Subject<boolean>();
 
   constructor(
     private pokemonService: PokemonService,
@@ -31,6 +32,7 @@ export class PokemonComponent {
       .get('searchQuery')
       .valueChanges
       .pipe(
+        takeUntil(this.unsubscribeAll),
         debounceTime(800),
         tap(() => {
           this.loading = true;
@@ -53,6 +55,10 @@ export class PokemonComponent {
         this.pokemon = data ? data : null;
         this.loading = false;
       });
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribeAll.next(true);
   }
 
   setName(name: string): void {

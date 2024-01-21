@@ -10,8 +10,8 @@ export class PokemonCardComponent {
   @Input() loading = false;
   pokemonDetails: any = null;
   @Output() setName = new EventEmitter<string>();
-  constructor() { }
 
+  constructor() { }
   setNameEvent(event: any): void {
     this.setName.emit(event);
   }

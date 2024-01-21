@@ -1,4 +1,4 @@
-import { PokemonService } from './../../../services/pokemon.service';
+import { PokemonsService } from '../../../services/pokemons.service';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subject, catchError, delay, of, switchMap, takeUntil } from 'rxjs';
 import { EvolutionsService } from 'src/app/services/evolution.service';
@@ -21,7 +21,7 @@ export class PokemonDetailComponent implements OnChanges, OnDestroy {
   constructor(
     private speciesService: SpeciesService,
     private evolutionService: EvolutionsService,
-    private pokemonService: PokemonService,
+    private pokemonsService: PokemonsService,
     private cdr: ChangeDetectorRef
     ) {  }
 
@@ -75,7 +75,7 @@ export class PokemonDetailComponent implements OnChanges, OnDestroy {
   }
 
   getEvolutionImages(speciesName: string, i: number): void {
-    this.pokemonService
+    this.pokemonsService
     .getPokemon(speciesName)
     .pipe(
         takeUntil(this.unsubscribeAll),

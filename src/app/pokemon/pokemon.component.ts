@@ -1,5 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
-import { PokemonService } from '../services/pokemon.service';
+import { PokemonsService } from '../services/pokemons.service';
 import { FormBuilder } from '@angular/forms';
 import { Subject, catchError, debounceTime, of, switchMap, takeUntil, tap } from 'rxjs';
 
@@ -17,7 +17,7 @@ export class PokemonComponent implements OnDestroy {
   protected unsubscribeAll = new Subject<boolean>();
 
   constructor(
-    private pokemonService: PokemonService,
+    private pokemonsService: PokemonsService,
     private formBuilder: FormBuilder
   ) {
     this.searchForm = this.formBuilder.group({
@@ -39,7 +39,7 @@ export class PokemonComponent implements OnDestroy {
           this.pokemon = null;
         }),
         switchMap((value: string) => {
-          return this.pokemonService.getPokemon(value.toLocaleLowerCase(), {
+          return this.pokemonsService.getPokemon(value.toLocaleLowerCase(), {
             offset: this.pageIndex,
             limit: this.pageSize
           })

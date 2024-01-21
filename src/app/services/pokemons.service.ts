@@ -5,7 +5,7 @@ import { Observable, delay } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class PokemonService {
+export class PokemonsService {
   private apiUrl = 'https://pokeapi.co/api/v2/pokemon';
 
 

@@ -21,7 +21,7 @@
 [pageSize]="pageSize"
 [pageIndex]="pageIndex"
 [pageSizeOptions]="pageSizeOptions"
-[length]="pokemon.count"
+[length]="pokemon?.count"
 (page)="onPageChange($event)"
 showFirstLastButtons
 ></mat-paginator>

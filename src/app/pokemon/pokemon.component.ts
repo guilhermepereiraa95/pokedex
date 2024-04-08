@@ -1,15 +1,17 @@
 import { Component, OnDestroy } from '@angular/core';
 import { PokemonsService } from '../services/pokemons.service';
-import { FormBuilder } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Subject, catchError, debounceTime, of, switchMap, takeUntil, tap } from 'rxjs';
+import { Pokemon } from '../interfaces/pokemon.interface';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-pokemon',
   templateUrl: './pokemon.component.html',
 })
 export class PokemonComponent implements OnDestroy {
-  pokemon: any  = '';
-  searchForm: any;
+  pokemon: Pokemon | null = null;
+  searchForm: FormGroup;
   loading = false;
   pageSize = 10;
   pageIndex = 0;
@@ -21,22 +23,21 @@ export class PokemonComponent implements OnDestroy {
     private formBuilder: FormBuilder
   ) {
     this.searchForm = this.formBuilder.group({
-      searchQuery: [''],
+      searchQuery: [null],
     });
 
     this.searchValueChange();
   }
 
   searchValueChange(): void {
-    this.searchForm
-      .get('searchQuery')
+    this.searchQuery
       .valueChanges
       .pipe(
         takeUntil(this.unsubscribeAll),
         debounceTime(800),
         tap(() => {
           this.loading = true;
-          this.pokemon = null;
+          this.pokemon = null
         }),
         switchMap((value: string) => {
           return this.pokemonsService.getPokemon(value.toLocaleLowerCase(), {
@@ -51,10 +52,15 @@ export class PokemonComponent implements OnDestroy {
           }// Make the API call
         )
       )
-      .subscribe((data: any) => {
-        this.pokemon = data ? data : null;
+      .subscribe({
+        next: (data: Pokemon) => {
+        this.pokemon = data;
         this.loading = false;
-      });
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error.error.message)
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -62,12 +68,16 @@ export class PokemonComponent implements OnDestroy {
   }
 
   setName(name: string): void {
-    this.searchForm.get('searchQuery').setValue(name.toLocaleLowerCase());
+    this.searchQuery.setValue(name.toLocaleLowerCase());
   }
 
   onPageChange(event: any): void {
     this.pageSize = event.pageSize;
     this.pageIndex = event.pageIndex;
-    this.searchForm.get('searchQuery').setValue('');
+    this.searchQuery.setValue('');
+  }
+
+  get searchQuery(): any {
+    return this.searchForm.get('searchQuery');
   }
 }

@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Pokemon } from 'src/app/interfaces/pokemon.interface';
 
 @Component({
   selector: 'app-pokemon-card',
-  templateUrl: './pokemon-card.component.html',
-  styleUrls: ['./pokemon-card.component.scss']
+  templateUrl: './pokemon-card.component.html'
 })
 export class PokemonCardComponent {
-  @Input() pokemon: any = null;
+  @Input() pokemon?: Pokemon | null;
   @Input() loading = false;
   pokemonDetails: any = null;
   @Output() setName = new EventEmitter<string>();

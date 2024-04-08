@@ -1,17 +1,17 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Pokemon } from 'src/app/interfaces/pokemon.interface';
 
 @Component({
   selector: 'app-pokemon-list',
-  templateUrl: './pokemon-list.component.html',
-  styleUrls: ['./pokemon-list.component.scss']
+  templateUrl: './pokemon-list.component.html'
 })
 export class PokemonListComponent {
-  @Input() pokemonList: any[] = [];
+  @Input() pokemonList?: Pokemon[] = [];
   @Output() setName = new EventEmitter<string>();
 
   constructor() {  }
 
-  setSearchName(name: any) {
-    this.setName.emit(name)
+  setSearchName(name?: string) {
+    this.setName.emit(name);
   }
 }

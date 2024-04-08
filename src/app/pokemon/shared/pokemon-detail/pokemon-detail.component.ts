@@ -1,19 +1,19 @@
 import { PokemonsService } from '../../../services/pokemons.service';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subject, catchError, delay, of, switchMap, takeUntil } from 'rxjs';
+import { Evolution } from 'src/app/interfaces/evolutions.interface';
 import { EvolutionsService } from 'src/app/services/evolution.service';
 import { SpeciesService } from 'src/app/services/species.service';
 
 @Component({
   selector: 'app-pokemon-detail',
   templateUrl: './pokemon-detail.component.html',
-  styleUrls: ['./pokemon-detail.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PokemonDetailComponent implements OnChanges, OnDestroy {
   @Input() pokemonDetails: any = null;
   @Output() setName = new EventEmitter<string>();
-  evolutions: any;
+  evolutions?: [];
   evolutionPic: any[] = [];
   loading = false;
   protected unsubscribeAll = new Subject<boolean>();
@@ -38,7 +38,7 @@ export class PokemonDetailComponent implements OnChanges, OnDestroy {
         })
       )
       .subscribe({
-        next: async (evolution: any) => {
+        next: async (evolution: Evolution) => {
         if(!evolution) {
           return;
         }
@@ -59,7 +59,7 @@ export class PokemonDetailComponent implements OnChanges, OnDestroy {
     this.unsubscribeAll.next(true);
   }
 
-  extractEvolutionNames(evolution: any, result: any[] = []): any {
+  extractEvolutionNames(evolution: Evolution, result: any[] = []): any {
     result.push(evolution.species.name);
 
     if (evolution.evolves_to.length > 0) {
@@ -69,12 +69,12 @@ export class PokemonDetailComponent implements OnChanges, OnDestroy {
     return result;
   }
 
-
   setNameDetail(event: any): void {
     this.setName.emit(event);
   }
 
   getEvolutionImages(speciesName: string, i: number): void {
+    console.log(speciesName)
     this.pokemonsService
     .getPokemon(speciesName)
     .pipe(

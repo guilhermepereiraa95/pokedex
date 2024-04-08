@@ -2,6 +2,7 @@ import { PokemonsService } from '../../../services/pokemons.service';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subject, catchError, delay, of, switchMap, takeUntil } from 'rxjs';
 import { Evolution } from 'src/app/interfaces/evolutions.interface';
+import { Pokemon } from 'src/app/interfaces/pokemon.interface';
 import { EvolutionsService } from 'src/app/services/evolution.service';
 import { SpeciesService } from 'src/app/services/species.service';
 
@@ -11,10 +12,10 @@ import { SpeciesService } from 'src/app/services/species.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PokemonDetailComponent implements OnChanges, OnDestroy {
-  @Input() pokemonDetails: any = null;
+  @Input() pokemonDetails?: Pokemon;
   @Output() setName = new EventEmitter<string>();
   evolutions?: [];
-  evolutionPic: any[] = [];
+  evolutionPic: string[] = [];
   loading = false;
   protected unsubscribeAll = new Subject<boolean>();
 
@@ -28,7 +29,7 @@ export class PokemonDetailComponent implements OnChanges, OnDestroy {
     ngOnChanges(): void {
     this.loading = true;
 
-    this.speciesService.getSpecie(this.pokemonDetails.species.url)
+    this.speciesService.getSpecie(this.pokemonDetails?.species?.url)
       .pipe(
         takeUntil(this.unsubscribeAll),
         switchMap(specie => this.evolutionService.getEvolution(specie.evolution_chain.url)),
@@ -59,7 +60,7 @@ export class PokemonDetailComponent implements OnChanges, OnDestroy {
     this.unsubscribeAll.next(true);
   }
 
-  extractEvolutionNames(evolution: Evolution, result: any[] = []): any {
+  extractEvolutionNames(evolution: Evolution, result: string[] = []): any {
     result.push(evolution.species.name);
 
     if (evolution.evolves_to.length > 0) {
@@ -74,7 +75,6 @@ export class PokemonDetailComponent implements OnChanges, OnDestroy {
   }
 
   getEvolutionImages(speciesName: string, i: number): void {
-    console.log(speciesName)
     this.pokemonsService
     .getPokemon(speciesName)
     .pipe(

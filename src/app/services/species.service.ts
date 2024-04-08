@@ -9,7 +9,7 @@ export class SpeciesService {
 
   constructor(private http: HttpClient) { }
 
-  getSpecie(url: string): Observable<any> {
+  getSpecie(url?: string): Observable<any> {
     return this.http.get(`${url}`);
   }
 }

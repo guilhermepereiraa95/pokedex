@@ -6,7 +6,7 @@ WORKDIR /app
 COPY app/package*.json ./
 RUN npm install --force
 
-COPY app . .
+COPY app .
 
 RUN npm run build
 

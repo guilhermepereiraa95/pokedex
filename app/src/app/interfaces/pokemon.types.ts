@@ -19,4 +19,5 @@ export interface PokemonListResponse {
 
 export interface PokemonSearchResponse {
   results: Pokemon[];
+  total?: number;
 }

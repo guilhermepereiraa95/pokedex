@@ -1,12 +1,15 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { PokemonService } from "./pokemon.service";
-import { PokemonDetail } from "./pokemon.types";
+import { CommonModule } from "@angular/common";
+import { PokemonService } from "../../services/pokemon.service";
+import { PokemonDetail } from "../../interfaces/pokemon.types";
 
 @Component({
   selector: "app-pokemon-detail",
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: "./pokemon-detail.component.html",
-  styleUrl: "./pokemon-detail.component.scss",
+  styleUrls: ["./pokemon-detail.component.scss"],
 })
 export class PokemonDetailComponent implements OnInit {
   pokemon: PokemonDetail | null = null;

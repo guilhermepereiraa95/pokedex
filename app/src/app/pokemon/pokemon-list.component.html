@@ -1,0 +1,41 @@
+<div class="pokemon-list-container">
+  <div class="search-section">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (keyup)="onSearch()"
+      placeholder="Search Pokemon..."
+      class="search-input"
+    />
+  </div>
+
+  <div *ngIf="isLoading && pokemonList.length === 0" class="loading">
+    Loading Pokemon...
+  </div>
+
+  <div class="pokemon-grid">
+    <div
+      *ngFor="let pokemon of filteredPokemon"
+      class="pokemon-card"
+      (click)="viewDetails(pokemon)"
+    >
+      <img [src]="pokemon.sprite" [alt]="pokemon.name" class="pokemon-image" />
+      <h3 class="pokemon-name">{{ pokemon.name | titlecase }}</h3>
+      <div class="pokemon-types">
+        <span *ngFor="let type of pokemon.types" class="type-badge">
+          {{ type | titlecase }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="filteredPokemon.length === 0 && !isLoading" class="no-results">
+    No Pokemon found
+  </div>
+
+  <div class="load-more-section" *ngIf="hasMoreResults && !searchTerm">
+    <button (click)="loadMore()" [disabled]="isLoading" class="load-more-btn">
+      {{ isLoading ? "Loading..." : "Load More" }}
+    </button>
+  </div>
+</div>

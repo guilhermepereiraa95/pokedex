@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    container_name: pokedex-api
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - FRONTEND_URL=http://localhost:4200
+    networks:
+      - pokedex-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/pokemon/list"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  frontend:
+    build:
+      context: .
+      dockerfile: app/Dockerfile
+    container_name: pokedex-app
+    ports:
+      - "4200:80"
+    environment:
+      - ANGULAR_API_URL=http://api:3000/api
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - pokedex-network
+
+networks:
+  pokedex-network:
+    driver: bridge

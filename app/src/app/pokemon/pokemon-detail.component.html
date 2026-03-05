@@ -1,0 +1,70 @@
+<div class="pokemon-detail-container" *ngIf="!isLoading && pokemon">
+  <button class="back-btn" (click)="goBack()">
+    ← Back to List
+  </button>
+
+  <div class="detail-card">
+    <div class="detail-header">
+      <img [src]="pokemon.sprite" [alt]="pokemon.name" class="pokemon-image" />
+      <div class="header-info">
+        <h1>{{ pokemon.name | titlecase }}</h1>
+        <div class="basic-info">
+          <span class="id">#{{ pokemon.id }}</span>
+          <div class="types">
+            <span *ngFor="let type of pokemon.types" class="type-badge">
+              {{ type | titlecase }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-body">
+      <div class="stats-section">
+        <h2>Stats</h2>
+        <div class="stats-grid">
+          <div *ngFor="let stat of getStatKeys()" class="stat-item">
+            <span class="stat-name">{{ stat | titlecase }}</span>
+            <div class="stat-bar">
+              <div
+                class="stat-fill"
+                [style.width.%]="(pokemon.stats[stat] / 255) * 100"
+                [style.backgroundColor]="getStatColor(pokemon.stats[stat])"
+              ></div>
+            </div>
+            <span class="stat-value">{{ pokemon.stats[stat] }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-box">
+          <h3>Height</h3>
+          <p>{{ pokemon.height / 10 }} m</p>
+        </div>
+        <div class="info-box">
+          <h3>Weight</h3>
+          <p>{{ pokemon.weight / 10 }} kg</p>
+        </div>
+      </div>
+
+      <div class="abilities-section">
+        <h2>Abilities</h2>
+        <div class="abilities-list">
+          <span *ngFor="let ability of pokemon.abilities" class="ability-badge">
+            {{ ability | titlecase }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="loading" *ngIf="isLoading">
+  Loading Pokemon details...
+</div>
+
+<div class="error" *ngIf="error">
+  {{ error }}
+  <button (click)="goBack()">Go Back</button>
+</div>

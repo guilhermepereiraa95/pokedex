@@ -1,8 +1,19 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, ChangeDetectionStrategy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { CommonModule } from "@angular/common";
 import { PokemonService } from "../../services/pokemon.service";
 import { PokemonDetail } from "../../interfaces/pokemon.types";
+import {
+  BehaviorSubject,
+  Observable,
+  Subject,
+  catchError,
+  finalize,
+  map,
+  of,
+  switchMap,
+  takeUntil,
+} from "rxjs";
 
 @Component({
   selector: "app-pokemon-detail",
@@ -10,12 +21,36 @@ import { PokemonDetail } from "../../interfaces/pokemon.types";
   imports: [CommonModule],
   templateUrl: "./pokemon-detail.component.html",
   styleUrls: ["./pokemon-detail.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PokemonDetailComponent implements OnInit {
-  pokemon: PokemonDetail | null = null;
-  isLoading: boolean = false;
-  error: string | null = null;
+export class PokemonDetailComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
 
+  private isLoadingSubject = new BehaviorSubject<boolean>(false);
+  private errorSubject = new BehaviorSubject<string | null>(null);
+
+  isLoading$ = this.isLoadingSubject.asObservable();
+  error$ = this.errorSubject.asObservable();
+
+  pokemonDetail$: Observable<PokemonDetail | null> = this.route.params.pipe(
+    map((params) => params["name"] as string),
+    switchMap((name) => {
+      if (!name) return of(null);
+
+      this.errorSubject.next(null);
+      this.isLoadingSubject.next(true);
+
+      return this.pokemonService.getPokemonDetail(name).pipe(
+        catchError((error) => {
+          this.errorSubject.next(`Failed to load Pokemon: ${error.message}`);
+          return of(null);
+        }),
+        finalize(() => this.isLoadingSubject.next(false)),
+      );
+    }),
+    takeUntil(this.destroy$),
+  );
+  pokemon: PokemonDetail | null = null;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -23,27 +58,14 @@ export class PokemonDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe((params) => {
-      if (params["name"]) {
-        this.loadPokemonDetail(params["name"]);
-      }
-    });
+    this.pokemonDetail$.subscribe((detail) => {
+          this.pokemon = detail;
+      });
   }
 
-  loadPokemonDetail(name: string): void {
-    this.isLoading = true;
-    this.error = null;
-
-    this.pokemonService.getPokemonDetail(name).subscribe({
-      next: (pokemon) => {
-        this.pokemon = pokemon;
-        this.isLoading = false;
-      },
-      error: (error) => {
-        this.error = `Failed to load Pokemon: ${error.message}`;
-        this.isLoading = false;
-      },
-    });
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   goBack(): void {
@@ -58,7 +80,7 @@ export class PokemonDetailComponent implements OnInit {
     return "#F44336";
   }
 
-  getStatKeys(): string[] {
-    return this.pokemon ? Object.keys(this.pokemon.stats) : [];
+  getStatKeys(pokemon: PokemonDetail | null): string[] {
+    return pokemon ? Object.keys(pokemon.stats) : [];
   }
 }

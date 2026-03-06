@@ -3,36 +3,42 @@
     <input
       type="text"
       [formControl]="searchControl"
-      placeholder="Pesquisar Pokémon..."
+      placeholder="Search Pokémon..."
       class="search-input"
     />
   </div>
 
-  <div *ngIf="isLoading" class="loading">Carregando...</div>
-
-  <div class="pokemon-grid">
-    <div
-      *ngFor="let pokemon of displayList"
-      class="pokemon-card"
-      (click)="viewDetails(pokemon)"
-    >
-      <img [src]="pokemon.sprite" [alt]="pokemon.name" class="pokemon-image" />
-      <h3 class="pokemon-name">{{ pokemon.name | titlecase }}</h3>
-      <div class="pokemon-types">
-        <span *ngFor="let type of pokemon.types" class="type-badge">
-          {{ type }}
-        </span>
-      </div>
+    <div class="pokemon-grid">
+      @for (pokemon of displayList$ | async; track pokemon.id) {
+        <div class="pokemon-card" (click)="viewDetails(pokemon)">
+          <img
+            [src]="pokemon.sprite"
+            [alt]="pokemon.name"
+            class="pokemon-image"
+          />
+          <h3 class="pokemon-name">{{ pokemon.name | titlecase }}</h3>
+          <div class="pokemon-types">
+            @for (type of pokemon.types; track type) {
+              <span class="type-badge">{{ type }}</span>
+            }
+          </div>
+        </div>
+      }
     </div>
-  </div>
 
-  <div class="load-more-section" *ngIf="!searchControl.value && !isLoading">
-    <button (click)="loadPokemonList()" class="load-more-btn">
-      Carregar Mais
-    </button>
-  </div>
+  @if (!searchControl.value && !(isLoading$ | async)) {
+    <div class="load-more-section">
+      <button (click)="loadPokemonList()" class="load-more-btn">
+        Carregar Mais
+      </button>
+    </div>
+  }
 
-  <div *ngIf="displayList.length === 0 && !isLoading" class="no-results">
-    Nenhum Pokémon encontrado.
-  </div>
+  @if (isLoading$ | async) {
+    <div class="loading">Carregando...</div>
+  }
+
+  @if ((displayList$ | async)?.length === 0 && !(isLoading$ | async)) {
+    <div class="no-results">Nenhum Pokémon encontrado.</div>
+  }
 </div>

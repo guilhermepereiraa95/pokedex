@@ -1,67 +1,96 @@
-import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
-import { CommonModule } from "@angular/common";
-import { ReactiveFormsModule, FormControl } from "@angular/forms";
-import { debounceTime, distinctUntilChanged, switchMap, tap } from "rxjs/operators";
-import { PokemonService } from "../../services/pokemon.service";
-import { Pokemon } from "../../interfaces/pokemon.types";
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  OnDestroy,
+} from '@angular/core';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormControl } from '@angular/forms';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  switchMap,
+  tap,
+  startWith,
+  map,
+} from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { PokemonService } from '../../services/pokemon.service';
+import { Pokemon } from '../../interfaces/pokemon.types';
 
 @Component({
-  selector: "app-pokemon-list",
+  selector: 'app-pokemon-list',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: "./pokemon-list.component.html",
-  styleUrls: ["./pokemon-list.component.scss"]
+  templateUrl: './pokemon-list.component.html',
+  styleUrls: ['./pokemon-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PokemonListComponent implements OnInit {
-  pokemonList: Pokemon[] = [];
-  displayList: Pokemon[] = [];
+export class PokemonListComponent implements OnInit, OnDestroy {
   searchControl = new FormControl('');
 
-  isLoading = false;
-  offset = 0;
-  limit = 20;
+  private pokemonListSubject = new BehaviorSubject<Pokemon[]>([]);
+  private isLoadingSubject = new BehaviorSubject<boolean>(false);
+  private offsetSubject = new BehaviorSubject<number>(0);
 
-  constructor(private pokemonService: PokemonService, private router: Router) {}
+  displayList$: Observable<Pokemon[]>;
+  isLoading$: Observable<boolean>;
+
+  private offset = 0;
+  private limit = 20;
+
+  constructor(
+    private pokemonService: PokemonService,
+    private router: Router,
+  ) {
+    this.isLoading$ = this.isLoadingSubject.asObservable();
+
+    this.displayList$ = this.searchControl.valueChanges.pipe(
+      startWith(''),
+      tap(() => this.isLoadingSubject.next(true)),
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((term) => {
+        if (!term?.trim()) {
+          return this.pokemonListSubject.asObservable();
+        }
+        return this.pokemonService
+          .searchPokemon(term.trim())
+          .pipe(map((resp: any) => resp.results || []));
+      }),
+      tap(() => this.isLoadingSubject.next(false)),
+    );
+  }
 
   ngOnInit(): void {
     this.loadPokemonList();
+  }
 
-    this.searchControl.valueChanges.pipe(
-      debounceTime(400),
-      distinctUntilChanged(),
-      tap(() => this.isLoading = true),
-      switchMap(term => {
-        if (!term?.trim()) return [];
-        return this.pokemonService.searchPokemon(term.trim());
-      })
-    ).subscribe({
-      next: (resp: any) => {
-
-        this.displayList = this.searchControl.value ? resp.results : this.pokemonList;
-        this.isLoading = false;
-      },
-      error: () => {
-        this.displayList = [];
-        this.isLoading = false;
-      }
-    });
+  ngOnDestroy(): void {
+    this.pokemonListSubject.complete();
+    this.isLoadingSubject.complete();
+    this.offsetSubject.complete();
   }
 
   loadPokemonList(): void {
-    this.isLoading = true;
-    this.pokemonService.getPokemonList(this.limit, this.offset).subscribe(response => {
-      this.pokemonList = [...this.pokemonList, ...response.results];
-
-      if (!this.searchControl.value) {
-        this.displayList = this.pokemonList;
-      }
-      this.offset += this.limit;
-      this.isLoading = false;
-    });
+    this.pokemonService
+      .getPokemonList(this.limit, this.offset)
+      .pipe(tap(() => this.isLoadingSubject.next(true)))
+      .subscribe({
+        next: (response) => {
+          const updatedList = [
+            ...this.pokemonListSubject.value,
+            ...response.results,
+          ];
+          this.pokemonListSubject.next(updatedList);
+          this.offset += this.limit;
+        },
+        complete: () => this.isLoadingSubject.next(false)
+      });
   }
 
   viewDetails(pokemon: Pokemon) {
-    this.router.navigate(["/details", pokemon.name]);
+    this.router.navigate(['/details', pokemon.name]);
   }
 }

@@ -53,6 +53,7 @@ export class PokemonDetailComponent implements OnInit, OnDestroy {
     takeUntil(this.destroy$),
   );
   pokemon: PokemonDetail | null = null;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,

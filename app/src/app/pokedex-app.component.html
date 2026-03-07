@@ -1,4 +1,4 @@
-<div class="d-flex justify-content-between align-items-center p-3 border-bottom bg-light transition-theme"
+<div class="d-flex justify-content-between align-items-center p-3 border-bottom bg-danger transition-theme"
      [class.bg-dark]="isDarkMode" [class.text-white]="isDarkMode">
   <h1 class="mb-0">Pokedex</h1>
 
@@ -8,10 +8,14 @@
       class="btn d-flex align-items-center gap-2"
       [ngClass]="isDarkMode ? 'btn-outline-light' : 'btn-outline-dark'"
       (click)="toggleTheme()">
-      <span>{{ isDarkMode ? '☀️' : '🌙' }}</span>
+
+      <i class="bi" [ngClass]="isDarkMode ? 'bi-sun-fill' : 'bi-moon-stars-fill'"></i>
+
       {{ isDarkMode ? 'Light Mode' : 'Dark Mode' }}
     </button>
   </div>
 </div>
 
-<router-outlet></router-outlet>
+<div [class.bg-dark]="isDarkMode" [class.text-white]="isDarkMode" class="transition-theme" style="min-height: 100vh;">
+  <router-outlet></router-outlet>
+</div>

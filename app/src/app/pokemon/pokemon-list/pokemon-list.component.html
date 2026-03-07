@@ -1,33 +1,39 @@
 <div class="mx-5 pb-5">
   <div class="search-sticky-header pt-5">
-      <input
-        type="text"
-        [formControl]="searchControl"
-        placeholder="Search Pokémon..."
-        class="form-control form-control-sm mb-3"
-      />
-      <div class="d-flex justify-content-between align-items-center">
-        <span class="text-muted">{{ (displayList$ | async)?.length || 0 }} Pokémons shown</span>
-        <button class="btn btn-outline-secondary btn-sm" (click)="resetList()" title="Reset to initial list">
-          Reset
-        </button>
-      </div>
+    <input
+      type="text"
+      [formControl]="searchControl"
+      placeholder="Search Pokémon..."
+      class="form-control form-control-sm mb-3"
+    />
+    <div class="d-flex justify-content-between align-items-center">
+      <span class="text-muted"
+        >{{ (displayList$ | async)?.length || 0 }} Pokémons shown</span
+      >
+      <button
+        class="btn btn-outline-secondary btn-sm"
+        (click)="resetList()"
+        title="Reset to initial list"
+      >
+        Reset
+      </button>
     </div>
+  </div>
   @if (isLoading$ | async) {
     <div class="text-center py-5 loading-container">
       <div>
-        <div class="spinner-border text-danger mb-3" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-        <div class="text-muted">Loading...</div>
+        <div class="spinner-grow text-danger mb-3" role="status"></div>
+        <div class="text-danger">Loading...</div>
       </div>
     </div>
   } @else {
-
     <div class="row g-4 mb-4">
       @for (pokemon of displayList$ | async; track pokemon.id) {
         <div class="col-12 col-sm-6 col-sm-4 col-xl-3">
-          <div class="card h-100 cursor-pointer pokemon-card-hover" (click)="viewDetails(pokemon)">
+          <div
+            class="card h-100 cursor-pointer pokemon-card-hover"
+            (click)="viewDetails(pokemon)"
+          >
             <img
               [src]="pokemon.sprite"
               [alt]="pokemon.name"
@@ -37,7 +43,12 @@
               <h5 class="card-title text-capitalize">{{ pokemon.name }}</h5>
               <div class="d-flex flex-wrap gap-2 justify-content-center">
                 @for (type of pokemon.types; track type) {
-                  <span class="badge" [style.backgroundColor]="getPokemonTypeColor(type)" style="color: white; font-weight: 500;">{{ type | titlecase }}</span>
+                  <span
+                    class="badge"
+                    [style.backgroundColor]="getPokemonTypeColor(type)"
+                    style="color: white; font-weight: 500"
+                    >{{ type | titlecase }}</span
+                  >
                 }
               </div>
             </div>
@@ -48,8 +59,8 @@
 
     @if ((displayList$ | async)?.length && !searchControl.value) {
       <div class="text-center">
-        <button (click)="loadPokemonList()" class="btn btn-danger btn-sm">
-          Load more Pokémons
+        <button (click)="loadPokemonList()" class="btn btn-danger btn-lg">
+          Load more
         </button>
       </div>
     }

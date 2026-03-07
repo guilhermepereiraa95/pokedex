@@ -14,6 +14,8 @@ import {
   switchMap,
   takeUntil,
 } from "rxjs";
+import { StatsColor, STATS_COLOR_THRESHOLDS } from "../../enums/stats-color.enum";
+import { POKEMON_TYPE_COLORS } from "../../enums/pokemon-types.enum";
 
 @Component({
   selector: "app-pokemon-detail",
@@ -73,14 +75,18 @@ export class PokemonDetailComponent implements OnInit, OnDestroy {
   }
 
   getStatColor(value: number): string {
-    if (value >= 100) return "#4CAF50";
-    if (value >= 80) return "#8BC34A";
-    if (value >= 60) return "#FFC107";
-    if (value >= 40) return "#FF9800";
-    return "#F44336";
+    if (value >= STATS_COLOR_THRESHOLDS.EXCELLENT) return StatsColor.EXCELLENT;
+    if (value >= STATS_COLOR_THRESHOLDS.VERY_GOOD) return StatsColor.VERY_GOOD;
+    if (value >= STATS_COLOR_THRESHOLDS.GOOD) return StatsColor.GOOD;
+    if (value >= STATS_COLOR_THRESHOLDS.FAIR) return StatsColor.FAIR;
+    return StatsColor.POOR;
   }
 
   getStatKeys(pokemon: PokemonDetail | null): string[] {
     return pokemon ? Object.keys(pokemon.stats) : [];
+  }
+
+  getPokemonTypeColor(type: string): string {
+    return POKEMON_TYPE_COLORS[type.toLowerCase() as keyof typeof POKEMON_TYPE_COLORS] || '#999999';
   }
 }

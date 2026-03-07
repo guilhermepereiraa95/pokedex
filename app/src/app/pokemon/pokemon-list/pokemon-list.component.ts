@@ -18,6 +18,7 @@ import {
 import { BehaviorSubject, Observable } from 'rxjs';
 import { PokemonService } from '../../services/pokemon.service';
 import { Pokemon } from '../../interfaces/pokemon.types';
+import { POKEMON_TYPE_COLORS } from '../../enums/pokemon-types.enum';
 
 @Component({
   selector: 'app-pokemon-list',
@@ -90,7 +91,18 @@ export class PokemonListComponent implements OnInit, OnDestroy {
       });
   }
 
+  resetList(): void {
+    this.offset = 0;
+    this.pokemonListSubject.next([]);
+    this.searchControl.reset();
+    this.loadPokemonList();
+  }
+
   viewDetails(pokemon: Pokemon) {
     this.router.navigate(['/details', pokemon.name]);
+  }
+
+  getPokemonTypeColor(type: string): string {
+    return POKEMON_TYPE_COLORS[type.toLowerCase() as keyof typeof POKEMON_TYPE_COLORS] || '#999999';
   }
 }

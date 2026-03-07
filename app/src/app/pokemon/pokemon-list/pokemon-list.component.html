@@ -1,44 +1,61 @@
-<div class="pokemon-list-container">
-  <div class="search-section">
+<div class="container-lg py-5">
+  <div class="mb-4">
     <input
       type="text"
       [formControl]="searchControl"
       placeholder="Search Pokémon..."
-      class="search-input"
+      class="form-control form-control-lg mb-3"
     />
+    <div class="d-flex justify-content-between align-items-center">
+      <span class="text-muted">{{ (displayList$ | async)?.length || 0 }} Pokémon</span>
+      <button class="btn btn-outline-secondary btn-sm" (click)="resetList()" title="Reset to initial list">
+        Reset
+      </button>
+    </div>
   </div>
 
-    <div class="pokemon-grid">
+  @if (isLoading$ | async) {
+    <div class="text-center py-5" style="min-height: 60vh; display: flex; align-items: center; justify-content: center;">
+      <div>
+        <div class="spinner-border text-danger mb-3" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="text-muted">Carregando...</div>
+      </div>
+    </div>
+  } @else {
+    <div class="row g-4 mb-4">
       @for (pokemon of displayList$ | async; track pokemon.id) {
-        <div class="pokemon-card" (click)="viewDetails(pokemon)">
-          <img
-            [src]="pokemon.sprite"
-            [alt]="pokemon.name"
-            class="pokemon-image"
-          />
-          <h3 class="pokemon-name">{{ pokemon.name | titlecase }}</h3>
-          <div class="pokemon-types">
-            @for (type of pokemon.types; track type) {
-              <span class="type-badge">{{ type }}</span>
-            }
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+          <div class="card h-100 cursor-pointer pokemon-card-hover" (click)="viewDetails(pokemon)">
+            <img
+              [src]="pokemon.sprite"
+              [alt]="pokemon.name"
+              class="card-img-top p-3"
+            />
+            <div class="card-body text-center">
+              <h5 class="card-title text-capitalize">{{ pokemon.name }}</h5>
+              <div class="d-flex flex-wrap gap-2 justify-content-center">
+                @for (type of pokemon.types; track type) {
+                  <span class="badge" [style.backgroundColor]="getPokemonTypeColor(type)" style="color: white; font-weight: 500;">{{ type | titlecase }}</span>
+                }
+              </div>
+            </div>
           </div>
         </div>
       }
     </div>
 
-  @if (!searchControl.value && !(isLoading$ | async)) {
-    <div class="load-more-section">
-      <button (click)="loadPokemonList()" class="load-more-btn">
-        Carregar Mais
-      </button>
-    </div>
-  }
+    @if (!searchControl.value) {
+      <div class="text-center">
+        <button (click)="loadPokemonList()" class="btn btn-danger btn-lg">
+          Load more Pokémons
+        </button>
+      </div>
+    }
 
-  @if (isLoading$ | async) {
-    <div class="loading">Carregando...</div>
-  }
-
-  @if ((displayList$ | async)?.length === 0 && !(isLoading$ | async)) {
-    <div class="no-results">Nenhum Pokémon encontrado.</div>
+    @if ((displayList$ | async)?.length === 0) {
+      <div class="text-center py-5 text-muted">No Pokémon found.</div>
+    }
   }
 </div>

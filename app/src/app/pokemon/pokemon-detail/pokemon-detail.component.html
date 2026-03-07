@@ -1,61 +1,71 @@
 @if (pokemon) {
-  <div class="pokemon-detail-container">
-    <button class="back-btn" (click)="goBack()">
+  <div class="container-lg py-4">
+    <button class="btn btn-light border mb-4" (click)="goBack()">
       ← Back to List
     </button>
 
-    <div class="detail-card">
-      <div class="detail-header">
-        <img [src]="pokemon.sprite" [alt]="pokemon.name" class="pokemon-image" />
-        <div class="header-info">
-          <h1>{{ pokemon.name | titlecase }}</h1>
-          <div class="basic-info">
-            <span class="id">#{{ pokemon.id }}</span>
-            <div class="types">
-              @for (type of pokemon.types; track type) {
-                <span class="type-badge">{{ type | titlecase }}</span>
-              }
+    <div class="card shadow">
+      <div class="bg-danger text-white p-4">
+        <div class="row g-4 align-items-center">
+          <div class="col-md-4 text-center">
+            <img [src]="pokemon.sprite" [alt]="pokemon.name" class="img-fluid" style="max-width: 200px;" />
+          </div>
+          <div class="col-md-8">
+            <h1 class="text-capitalize mb-3">{{ pokemon.name }}</h1>
+            <div class="d-flex gap-3 align-items-center flex-wrap">
+              <small class="text-light">#{{ pokemon.id }}</small>
+              <div class="d-flex gap-2 flex-wrap">
+                @for (type of pokemon.types; track type) {
+                  <span class="badge" [style.backgroundColor]="getPokemonTypeColor(type)" style="color: white; font-weight: 500;">{{ type | titlecase }}</span>
+                }
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="detail-body">
-        <div class="stats-section">
-          <h2>Stats</h2>
-          <div class="stats-grid">
+      <div class="card-body">
+        <div class="mb-5">
+          <h2 class="h5 mb-4">Stats</h2>
+          <div class="row g-4">
             @for (stat of getStatKeys(pokemon); track stat) {
-              <div class="stat-item">
-                <span class="stat-name">{{ stat | titlecase }}</span>
-                <div class="stat-bar">
+              <div class="col-12 col-sm-6 col-lg-4">
+                <div class="mb-2">
+                  <small class="text-muted text-uppercase">{{ stat }}</small>
+                </div>
+                <div class="progress mb-2" role="progressbar" [attr.aria-valuenow]="(pokemon.stats[stat] / 255) * 100" aria-valuemin="0" aria-valuemax="100">
                   <div
-                    class="stat-fill"
+                    class="progress-bar"
                     [style.width.%]="(pokemon.stats[stat] / 255) * 100"
                     [style.backgroundColor]="getStatColor(pokemon.stats[stat])"
                   ></div>
                 </div>
-                <span class="stat-value">{{ pokemon.stats[stat] }}</span>
+                <small class="text-dark fw-bold">{{ pokemon.stats[stat] }}</small>
               </div>
             }
           </div>
         </div>
 
-        <div class="info-grid">
-          <div class="info-box">
-            <h3>Height</h3>
-            <p>{{ pokemon.height / 10 }} m</p>
+        <div class="row g-3 mb-5">
+          <div class="col-6 col-md-3">
+            <div class="text-bg-light p-3 rounded text-center">
+              <small class="d-block text-muted mb-2">Height</small>
+              <p class="h5 mb-0">{{ pokemon.height / 10 }} m</p>
+            </div>
           </div>
-          <div class="info-box">
-            <h3>Weight</h3>
-            <p>{{ pokemon.weight / 10 }} kg</p>
+          <div class="col-6 col-md-3">
+            <div class="text-bg-light p-3 rounded text-center">
+              <small class="d-block text-muted mb-2">Weight</small>
+              <p class="h5 mb-0">{{ pokemon.weight / 10 }} kg</p>
+            </div>
           </div>
         </div>
 
-        <div class="abilities-section">
-          <h2>Abilities</h2>
-          <div class="abilities-list">
+        <div>
+          <h2 class="h5 mb-3">Abilities</h2>
+          <div class="d-flex flex-wrap gap-2">
             @for (ability of pokemon.abilities; track ability) {
-              <span class="ability-badge">{{ ability | titlecase }}</span>
+              <span class="badge text-bg-success">{{ ability | titlecase }}</span>
             }
           </div>
         </div>
@@ -65,12 +75,14 @@
 }
 
 @if (isLoading$ | async) {
-  <div class="loading">Loading Pokemon details...</div>
+  <div class="container-lg py-5">
+    <div class="text-center text-muted">Loading Pokemon details...</div>
+  </div>
 }
 
 <!-- @if (error$ | async) {
-  <div class="error">
+  <div class="alert alert-danger" role="alert">
     {{ error }}
-    <button (click)="goBack()">Go Back</button>
+    <button class="btn btn-sm btn-danger mt-3" (click)="goBack()">Go Back</button>
   </div>
 } -->

@@ -173,6 +173,7 @@ npm run build
 - **NestJS** - Node.js framework
 - **Axios** - HTTP client for PokéAPI integration
 - **Jest** - Testing framework
+- **Swagger** - API Documentation (available on http://localhost:3000/api/docs)
 
 ### Frontend
 - **Angular 21** - Modern web framework

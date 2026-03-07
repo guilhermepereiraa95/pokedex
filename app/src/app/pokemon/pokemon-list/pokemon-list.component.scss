@@ -7,3 +7,14 @@
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15) !important;
   }
 }
+
+.search-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  margin-bottom: 3rem;
+  background: white;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+

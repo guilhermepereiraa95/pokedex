@@ -1,14 +1,14 @@
 @if (pokemon) {
   <div class="container-lg py-4">
     <button class="btn btn-light border mb-4" (click)="goBack()">
-      ← Back to List
+      Back to List
     </button>
 
     <div class="card shadow">
       <div class="bg-danger text-white p-4">
         <div class="row g-4 align-items-center">
           <div class="col-md-4 text-center">
-            <img [src]="pokemon.sprite" [alt]="pokemon.name" class="img-fluid" style="max-width: 200px;" />
+            <img [src]="pokemon.sprite" [alt]="pokemon.name" class="img-fluid pokemon-sprite" />
           </div>
           <div class="col-md-8">
             <h1 class="text-capitalize mb-3">{{ pokemon.name }}</h1>

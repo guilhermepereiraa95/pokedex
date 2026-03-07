@@ -33,7 +33,6 @@ export class PokemonListComponent implements OnInit, OnDestroy {
 
   private pokemonListSubject = new BehaviorSubject<Pokemon[]>([]);
   private isLoadingSubject = new BehaviorSubject<boolean>(false);
-  private offsetSubject = new BehaviorSubject<number>(0);
 
   displayList$: Observable<Pokemon[]>;
   isLoading$: Observable<boolean>;
@@ -49,35 +48,41 @@ export class PokemonListComponent implements OnInit, OnDestroy {
 
     this.displayList$ = this.searchControl.valueChanges.pipe(
       startWith(''),
-      tap(() => this.isLoadingSubject.next(true)),
-      debounceTime(300),
+      debounceTime(1000),
       distinctUntilChanged(),
       switchMap((term) => {
+        this.isLoadingSubject.next(true);
         if (!term?.trim()) {
+          this.isLoadingSubject.next(false);
           return this.pokemonListSubject.asObservable();
         }
         return this.pokemonService
           .searchPokemon(term.trim())
-          .pipe(map((resp: any) => resp.results || []));
+          .pipe(
+            map((resp: any) => {
+              const results = resp.results || [];
+              this.pokemonListSubject.next(results);
+              return results;
+            }),
+            tap(() => this.isLoadingSubject.next(false)),
+          );
       }),
-      tap(() => this.isLoadingSubject.next(false)),
     );
   }
 
   ngOnInit(): void {
+    this.isLoadingSubject.next(true);
     this.loadPokemonList();
   }
 
   ngOnDestroy(): void {
     this.pokemonListSubject.complete();
     this.isLoadingSubject.complete();
-    this.offsetSubject.complete();
   }
 
   loadPokemonList(): void {
     this.pokemonService
       .getPokemonList(this.limit, this.offset)
-      .pipe(tap(() => this.isLoadingSubject.next(true)))
       .subscribe({
         next: (response) => {
           const updatedList = [
@@ -86,8 +91,8 @@ export class PokemonListComponent implements OnInit, OnDestroy {
           ];
           this.pokemonListSubject.next(updatedList);
           this.offset += this.limit;
+          this.isLoadingSubject.next(false);
         },
-        complete: () => this.isLoadingSubject.next(false)
       });
   }
 

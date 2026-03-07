@@ -148,6 +148,7 @@ npm run build
 - **Angular 21** - Modern web framework
 - **RxJS** - Reactive programming library
 - **TypeScript** - Type-safe JavaScript
+- **Jest** - Testing framework
 
 ### Deployment
 - **Docker** - Containerization

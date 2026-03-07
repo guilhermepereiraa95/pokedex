@@ -76,7 +76,7 @@ pokedex/
 
 1. Clone the repository:
    ```shell
-   git clone https://github.com/jitterbit/pokedex.git
+   git clone https://github.com/guilhermepereiraa95/pokedex
    cd pokedex
    ```
 

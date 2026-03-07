@@ -1,5 +1,7 @@
 # Build stage
-FROM node:21-alpine AS builder
+FROM node:24-alpine AS builder
+
+RUN apk add --no-cache curl
 
 WORKDIR /app
 
@@ -14,7 +16,9 @@ COPY api/nest-cli.json ./
 RUN npm run build
 
 # Production stage
-FROM node:21-alpine
+FROM node:24-alpine
+
+RUN apk add --no-cache curl
 
 WORKDIR /app
 

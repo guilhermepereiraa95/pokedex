@@ -1,6 +1,6 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { PokemonController } from "./pokemon.controller";
-import { PokemonService } from "../service/pokemon.service";
+import { PokemonController } from "../pokemon/pokemon.controller";
+import { PokemonService } from "../../service/pokemon.service";
 
 describe("PokemonController", () => {
   let controller: PokemonController;

@@ -28,9 +28,11 @@
     "watch": "ng build --watch --configuration development",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:cov": "jest --coverage"
+    "test:cov": "jest --coverage",
+    "lint": "ng lint"
   },
   "dependencies": {
+    "@angular-eslint/schematics": "^21.3.0",
     "@angular/animations": "^21.1.5",
     "@angular/common": "^21.1.5",
     "@angular/compiler": "^21.1.5",
@@ -49,13 +51,25 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^21.1.4",
+    "@angular-eslint/builder": "^21.3.0",
+    "@angular-eslint/eslint-plugin": "^21.3.0",
+    "@angular-eslint/eslint-plugin-template": "^21.3.0",
+    "@angular-eslint/template-parser": "^21.3.0",
     "@angular/cli": "^21.1.4",
     "@angular/compiler-cli": "^21.1.5",
+    "@eslint/js": "^10.0.1",
     "@types/jest": "^30.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.56.1",
+    "@typescript-eslint/parser": "^8.56.1",
+    "angular-eslint": "21.3.0",
+    "eslint": "^10.0.3",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
     "jest-preset-angular": "^16.1.1",
     "ts-jest": "^29.4.6",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "8.56.1"
   }
 }

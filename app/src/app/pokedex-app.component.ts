@@ -1,4 +1,4 @@
-import { Component, Inject, Renderer2 } from '@angular/core';
+import { Component, Renderer2, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule, DOCUMENT } from '@angular/common';
 
@@ -10,12 +10,10 @@ import { CommonModule, DOCUMENT } from '@angular/common';
   imports: [CommonModule, RouterModule]
 })
 export class PokedexAppComponent {
-  isDarkMode = false;
+  private document = inject<Document>(DOCUMENT);
+  private renderer = inject(Renderer2);
 
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private renderer: Renderer2
-  ) {}
+  isDarkMode = false;
 
   toggleTheme() {
     this.isDarkMode = !this.isDarkMode;

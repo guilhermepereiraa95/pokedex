@@ -1,6 +1,6 @@
 @if (pokemon) {
   <div class="container-sm py-4">
-    <button class="btn btn-light border mb-4" (click)="goBack()">
+    <button class="btn btn-light border mb-4" (keypress)="goBack()" (click)="goBack()">
       <i class="bi bi-chevron-left"></i>
       Back to List
     </button>

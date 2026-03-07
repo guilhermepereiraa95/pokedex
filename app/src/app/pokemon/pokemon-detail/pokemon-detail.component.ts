@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ChangeDetectionStrategy, OnInit } from "@angular/core";
+import { Component, OnDestroy, ChangeDetectionStrategy, OnInit, inject } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { CommonModule } from "@angular/common";
 import { PokemonService } from "../../services/pokemon.service";
@@ -26,6 +26,10 @@ import { POKEMON_TYPE_COLORS } from "../../enums/pokemon-types.enum";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PokemonDetailComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private pokemonService = inject(PokemonService);
+
   private destroy$ = new Subject<void>();
 
   private isLoadingSubject = new BehaviorSubject<boolean>(false);
@@ -53,12 +57,6 @@ export class PokemonDetailComponent implements OnInit, OnDestroy {
     takeUntil(this.destroy$),
   );
   pokemon: PokemonDetail | null = null;
-
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private pokemonService: PokemonService
-  ) {}
 
   ngOnInit(): void {
     this.pokemonDetail$.subscribe((detail) => {

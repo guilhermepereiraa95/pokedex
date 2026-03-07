@@ -27,11 +27,11 @@ describe('PokemonListComponent', () => {
         of({ results: [mockPokemon] })
       ),
       getPokemonDetail: jest.fn()
-    } as any;
+    };
 
     const routerMock = {
       navigate: jest.fn(),
-    } as any;
+    };
 
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, PokemonListComponent],

@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { PokemonDetail, PokemonListResponse, PokemonSearchResponse } from "../interfaces/pokemon.types";
@@ -9,9 +9,9 @@ import { PokemonDetail, PokemonListResponse, PokemonSearchResponse } from "../in
 export class PokemonService {
   private apiUrl = "http://localhost:3000/api/pokemon";
 
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
-  getPokemonList(limit: number = 20, offset: number = 0): Observable<PokemonListResponse> {
+  getPokemonList(limit = 20, offset = 0): Observable<PokemonListResponse> {
     return this.http.get<PokemonListResponse>(
       `${this.apiUrl}/list?limit=${limit}&offset=${offset}`
     );

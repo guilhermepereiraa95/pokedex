@@ -3,6 +3,7 @@ import {
   OnInit,
   ChangeDetectionStrategy,
   OnDestroy,
+  inject,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -39,11 +40,10 @@ export class PokemonListComponent implements OnInit, OnDestroy {
 
   private offset = 0;
   private limit = 20;
+  private pokemonService = inject(PokemonService);
+  private router = inject(Router);
 
-  constructor(
-    private pokemonService: PokemonService,
-    private router: Router,
-  ) {
+  constructor() {
     this.isLoading$ = this.isLoadingSubject.asObservable();
 
     this.displayList$ = this.searchControl.valueChanges.pipe(
@@ -59,7 +59,7 @@ export class PokemonListComponent implements OnInit, OnDestroy {
         return this.pokemonService
           .searchPokemon(term.trim())
           .pipe(
-            map((resp: any) => {
+            map((resp) => {
               const results = resp.results || [];
               this.pokemonListSubject.next(results);
               return results;

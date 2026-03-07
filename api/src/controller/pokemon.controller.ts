@@ -1,11 +1,13 @@
 import { Controller, Get, Query, Param } from "@nestjs/common";
 import { PokemonService } from "../service/pokemon.service";
+import { ApiOperation } from "@nestjs/swagger";
 
 @Controller("pokemon")
 export class PokemonController {
   constructor(private readonly pokemonService: PokemonService) {}
 
   @Get("list")
+  @ApiOperation({ summary: 'Get list of Pokémons with limit and offset' })
   async getPokemonList(
     @Query("limit") limit: string = "20",
     @Query("offset") offset: string = "0"
@@ -17,6 +19,7 @@ export class PokemonController {
   }
 
   @Get("search")
+  @ApiOperation({ summary: 'Search Pokémon by name' })
   async searchPokemon(@Query("name") name: string) {
     if (!name) {
       return { results: [] };
@@ -26,6 +29,7 @@ export class PokemonController {
   }
 
   @Get(":name")
+  @ApiOperation({ summary: 'Search Pokémon details' })
   async getPokemonDetail(@Param("name") name: string) {
     return this.pokemonService.getPokemonDetail(name);
   }

@@ -12,7 +12,7 @@ This repository contains a complete Pokédex application with a REST API built u
 
 ## Prerequisites
 
-- [Node.js v22](https://nodejs.org/en) or higher
+- [Node.js v24](https://nodejs.org/en) or higher
 - [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) (for containerized deployment)
 
 ## Project Structure
@@ -21,20 +21,50 @@ This repository contains a complete Pokédex application with a REST API built u
 pokedex/
 ├── api/                 # NestJS REST API
 │   ├── src/
-│   │   ├── pokemon/     # Pokemon module
-│   │   │   ├── pokemon.controller.ts
+|   |   |── controller/
+|   |       |── pokemon.controller.spec.ts
+|   |       └── pokemon.controller.ts
+│   │   ├── interface/
+│   │   │   ├── pokemon.types.ts
+|   |   ├──service/   
 │   │   │   ├── pokemon.service.ts
-│   │   │   └── pokemon.types.ts
+│   │   │   └──pokemon.service.spec.ts
 │   │   └── main.ts
 │   ├── Dockerfile
 │   └── package.json
 ├── app/                 # Angular SPA
 │   ├── src/
 │   │   ├── app/
-│   │   │   ├── pokemon/    # Pokemon components and services
-│   │   │   └── ...
+│   │   │   ├── enums/
+|   |   |   |   ├── index.ts
+|   |   |   |   ├── pokemon-types.enum.ts
+|   |   |   |   └── stats-color.enum.ts
+│   │   │   ├── interfaces/
+|   |   |   |   └── pokemon.types
+│   │   │   ├── pokemon/
+|   |   |   |   ├── pokemon-detail/
+|   |   |   |   |   ├──  pokemon-detail.component.html
+|   |   |   |   |   ├──  pokemon-detail.component.scss
+|   |   |   |   |   ├──  pokemon-detail.component.ts
+|   |   |   |   |   └──  pokemon-detail.component.spec.ts
+|   |   |   |   ├── pokemon-list/
+|   |   |   |   |   ├──  pokemon-list.component.html
+|   |   |   |   |   ├──  pokemon-list.component.scss
+|   |   |   |   |   ├──  pokemon-list.component.ts
+|   |   |   |   |   └──  pokemon-list.component.spec.ts
+│   │   │   ├── services/
+|   |   |   |   ├── pokemon.service.ts
+|   |   |   |   └── pokemon.service.spec.ts
+│   │   │   ├── pokedex-app.component.html
+│   │   │   ├── pokedex-app.component.scss
+│   │   │   ├── pokedex-app.component.ts
+│   │   │   └── pokedex-app.routes.ts
 │   ├── Dockerfile
 │   ├── nginx.conf
+│   ├── eslint.config.js
+│   ├── setup-jest.ts
+│   ├── jest.config.ts
+│   ├── tsconfig.spec.json
 │   └── package.json
 ├── docker-compose.yml
 └── README.md
@@ -146,9 +176,11 @@ npm run build
 
 ### Frontend
 - **Angular 21** - Modern web framework
+- **Bootstrap** - UI interface
 - **RxJS** - Reactive programming library
 - **TypeScript** - Type-safe JavaScript
 - **Jest** - Testing framework
+- **ESlint** - Linter for code enhancements
 
 ### Deployment
 - **Docker** - Containerization

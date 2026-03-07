@@ -1,10 +1,10 @@
-<div class="container-lg py-5">
+<div class="container-sm py-5">
   <div class="search-sticky-header">
       <input
         type="text"
         [formControl]="searchControl"
         placeholder="Search Pokémon..."
-        class="form-control form-control-lg mb-3"
+        class="form-control form-control-sm mb-3"
       />
       <div class="d-flex justify-content-between align-items-center">
         <span class="text-muted">{{ (displayList$ | async)?.length || 0 }} Pokémons shown</span>
@@ -14,7 +14,7 @@
       </div>
     </div>
   @if (isLoading$ | async) {
-    <div class="text-center py-5" style="min-height: 60vh; display: flex; align-items: center; justify-content: center;">
+    <div class="text-center py-5 loading-container">
       <div>
         <div class="spinner-border text-danger mb-3" role="status">
           <span class="visually-hidden">Loading...</span>
@@ -26,7 +26,7 @@
 
     <div class="row g-4 mb-4">
       @for (pokemon of displayList$ | async; track pokemon.id) {
-        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+        <div class="col-12 col-sm-6 col-sm-4 col-xl-3">
           <div class="card h-100 cursor-pointer pokemon-card-hover" (click)="viewDetails(pokemon)">
             <img
               [src]="pokemon.sprite"
@@ -46,9 +46,9 @@
       }
     </div>
 
-    @if (!searchControl.value) {
+    @if ((displayList$ | async)?.length) {
       <div class="text-center">
-        <button (click)="loadPokemonList()" class="btn btn-danger btn-lg">
+        <button (click)="loadPokemonList()" class="btn btn-danger btn-sm">
           Load more Pokémons
         </button>
       </div>

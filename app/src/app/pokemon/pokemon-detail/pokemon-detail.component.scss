@@ -1,3 +1,23 @@
 .pokemon-sprite {
   max-width: 200px;
 }
+
+.stat-container {
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: #6c757d;
+  text-transform: uppercase;
+}
+
+.stat-progress {
+  margin-bottom: 0.5rem;
+}
+
+.stat-value {
+  font-size: 0.875rem;
+  color: #212529;
+  font-weight: 600;
+}

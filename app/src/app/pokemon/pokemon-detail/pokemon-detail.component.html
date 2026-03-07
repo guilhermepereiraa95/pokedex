@@ -1,5 +1,5 @@
 @if (pokemon) {
-  <div class="container-lg py-4">
+  <div class="container-sm py-4">
     <button class="btn btn-light border mb-4" (click)="goBack()">
       Back to List
     </button>
@@ -29,18 +29,18 @@
           <h2 class="h5 mb-4">Stats</h2>
           <div class="row g-4">
             @for (stat of getStatKeys(pokemon); track stat) {
-              <div class="col-12 col-sm-6 col-lg-4">
-                <div class="mb-2">
-                  <small class="text-muted text-uppercase">{{ stat }}</small>
+              <div class="col-12 col-sm-6 col-sm-4">
+                <div class="stat-container">
+                  <small class="stat-label">{{ stat }}</small>
                 </div>
-                <div class="progress mb-2" role="progressbar" [attr.aria-valuenow]="(pokemon.stats[stat] / 255) * 100" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress stat-progress" role="progressbar" [attr.aria-valuenow]="(pokemon.stats[stat] / 255) * 100" aria-valuemin="0" aria-valuemax="100">
                   <div
                     class="progress-bar"
                     [style.width.%]="(pokemon.stats[stat] / 255) * 100"
                     [style.backgroundColor]="getStatColor(pokemon.stats[stat])"
                   ></div>
                 </div>
-                <small class="text-dark fw-bold">{{ pokemon.stats[stat] }}</small>
+                <small class="stat-value">{{ pokemon.stats[stat] }}</small>
               </div>
             }
           </div>
@@ -75,7 +75,7 @@
 }
 
 @if (isLoading$ | async) {
-  <div class="container-lg py-5">
+  <div class="container-sm py-5">
     <div class="text-center text-muted">Loading Pokemon details...</div>
   </div>
 }

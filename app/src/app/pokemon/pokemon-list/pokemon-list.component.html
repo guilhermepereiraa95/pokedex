@@ -1,5 +1,5 @@
-<div class="container-sm py-5">
-  <div class="search-sticky-header">
+<div class="mx-5 pb-5">
+  <div class="search-sticky-header pt-5">
       <input
         type="text"
         [formControl]="searchControl"
@@ -46,7 +46,7 @@
       }
     </div>
 
-    @if ((displayList$ | async)?.length) {
+    @if ((displayList$ | async)?.length && !searchControl.value) {
       <div class="text-center">
         <button (click)="loadPokemonList()" class="btn btn-danger btn-sm">
           Load more Pokémons

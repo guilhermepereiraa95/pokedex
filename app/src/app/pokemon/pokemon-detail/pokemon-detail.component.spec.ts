@@ -1,9 +1,8 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing'; // Adicionado TestBed
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { PokemonDetailComponent } from './pokemon-detail.component';
 import { PokemonService } from '../../services/pokemon.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
-import { CommonModule } from '@angular/common';
 
 describe('PokemonDetailComponent', () => {
   let component: PokemonDetailComponent;
@@ -30,7 +29,6 @@ describe('PokemonDetailComponent', () => {
   };
 
   beforeEach(async () => {
-    // Definindo os mocks com Jest
     const pokemonServiceMock = {
       getPokemonDetail: jest.fn().mockReturnValue(of(mockPokemonDetail)),
       getPokemonList: jest.fn(),
@@ -46,7 +44,6 @@ describe('PokemonDetailComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      // Se o componente for Standalone (comum no Angular 21), ele vai em imports
       imports: [PokemonDetailComponent],
       providers: [
         { provide: PokemonService, useValue: pokemonServiceMock },
@@ -58,7 +55,6 @@ describe('PokemonDetailComponent', () => {
     fixture = TestBed.createComponent(PokemonDetailComponent);
     component = fixture.componentInstance;
 
-    // Tipagem correta para o Jest entender os mocks
     pokemonService = TestBed.inject(PokemonService) as jest.Mocked<PokemonService>;
     router = TestBed.inject(Router) as jest.Mocked<Router>;
   });
@@ -68,14 +64,13 @@ describe('PokemonDetailComponent', () => {
   });
 
   it('should call getPokemonDetail on init', () => {
-    fixture.detectChanges(); // Aciona o ngOnInit
+    fixture.detectChanges();
     expect(pokemonService.getPokemonDetail).toHaveBeenCalledWith('pikachu');
   });
 
-  // Usando fakeAsync em vez de done() com setTimeout (mais limpo no Jest)
   it('should display pokemon name', fakeAsync(() => {
     fixture.detectChanges();
-    tick(100); // Simula a passagem de 100ms
+    tick(100);
     expect(component.pokemon?.name).toBe('pikachu');
   }));
 

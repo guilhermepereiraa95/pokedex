@@ -3,7 +3,6 @@ import { PokemonListComponent } from './pokemon-list.component';
 import { PokemonService } from '../../services/pokemon.service';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
-import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
 describe('PokemonListComponent', () => {

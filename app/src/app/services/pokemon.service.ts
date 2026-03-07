@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { Pokemon, PokemonDetail, PokemonListResponse, PokemonSearchResponse } from "../interfaces/pokemon.types";
+import { PokemonDetail, PokemonListResponse, PokemonSearchResponse } from "../interfaces/pokemon.types";
 
 @Injectable({
   providedIn: "root",

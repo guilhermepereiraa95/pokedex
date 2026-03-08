@@ -48,7 +48,7 @@ export class PokemonListComponent implements OnInit, OnDestroy {
 
     this.displayList$ = this.searchControl.valueChanges.pipe(
       startWith(''),
-      debounceTime(1000),
+      debounceTime(500),
       distinctUntilChanged(),
       switchMap((term) => {
         this.isLoadingSubject.next(true);

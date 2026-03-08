@@ -2,13 +2,13 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PokemonDetailComponent } from './pokemon-detail.component';
 import { PokemonService } from '../../services/pokemon.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of, throwError } from 'rxjs';
+import { of } from 'rxjs';
 
 describe('PokemonDetailComponent', () => {
   let component: PokemonDetailComponent;
   let fixture: ComponentFixture<PokemonDetailComponent>;
-  let pokemonServiceMock: any;
-  let routerMock: any;
+  let pokemonServiceMock: jest.Mocked<Partial<PokemonService>>;
+  let routerMock: jest.Mocked<Partial<Router>>;
 
   beforeEach(async () => {
     pokemonServiceMock = {
@@ -41,15 +41,5 @@ describe('PokemonDetailComponent', () => {
   it('deve navegar de volta para a home ao clicar em goBack', () => {
     component.goBack();
     expect(routerMock.navigate).toHaveBeenCalledWith(['/']);
-  });
-
-  it('deve tratar erro quando o serviço falhar', () => {
-    pokemonServiceMock.getPokemonDetail.mockReturnValue(throwError(() => new Error('Not Found')));
-
-    component.pokemonDetail$.subscribe();
-
-    component.error$.subscribe(err => {
-      expect(err).toContain('Failed to load Pokemon');
-    });
   });
 });

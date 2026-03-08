@@ -4,12 +4,13 @@ import { Router } from '@angular/router';
 import { of } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PokemonListComponent } from './pokemon-list.component';
+import { PokemonDetail } from '../../interfaces/pokemon.types';
 
 describe('PokemonListComponent', () => {
   let component: PokemonListComponent;
   let fixture: ComponentFixture<PokemonListComponent>;
-  let pokemonServiceMock: any;
-  let routerMock: any;
+  let pokemonServiceMock: jest.Mocked<Partial<PokemonService>>;
+  let routerMock: jest.Mocked<Partial<Router>>;
 
   beforeEach(async () => {
     pokemonServiceMock = {
@@ -36,7 +37,7 @@ describe('PokemonListComponent', () => {
   });
 
   it('deve navegar para detalhes ao chamar viewDetails', () => {
-    const mockPoke = { name: 'mew' } as any;
+    const mockPoke = { name: 'mew' } as PokemonDetail;
     component.viewDetails(mockPoke);
     expect(routerMock.navigate).toHaveBeenCalledWith(['/details', 'mew']);
   });

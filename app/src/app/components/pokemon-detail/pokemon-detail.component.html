@@ -93,7 +93,7 @@
 }
 
 
-@if ((!pokemon && !(isLoading$ | async) || (error$ | async))) {
+@if ((!pokemon && (isLoading$ | async) === false || (error$ | async))) {
   <div class="container-sm py-5">
     <div class="text-center text-muted">Pokemon not found.</div>
     <div class="text-center mt-3">

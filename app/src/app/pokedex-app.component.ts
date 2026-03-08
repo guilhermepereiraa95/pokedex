@@ -3,7 +3,8 @@ import { RouterModule } from '@angular/router';
 import { CommonModule, DOCUMENT } from '@angular/common';
 
 @Component({
-  selector: 'app-pokedex',
+  // eslint-disable-next-line @angular-eslint/component-selector
+  selector: 'pokedex',
   templateUrl: './pokedex-app.component.html',
   styleUrls: ['./pokedex-app.component.scss'],
   standalone: true,

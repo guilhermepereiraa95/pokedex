@@ -3,7 +3,6 @@ import { PokemonDetailComponent } from './pokemon-detail.component';
 import { PokemonService } from '../../services/pokemon.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
-import { StatsColor } from '../../enums/stats-color.enum';
 
 describe('PokemonDetailComponent', () => {
   let component: PokemonDetailComponent;
@@ -47,8 +46,6 @@ describe('PokemonDetailComponent', () => {
   it('deve tratar erro quando o serviço falhar', () => {
     pokemonServiceMock.getPokemonDetail.mockReturnValue(throwError(() => new Error('Not Found')));
 
-    // Força uma nova emissão do paramMap para disparar o switchMap novamente se necessário,
-    // ou apenas verifica o comportamento do catchError
     component.pokemonDetail$.subscribe();
 
     component.error$.subscribe(err => {

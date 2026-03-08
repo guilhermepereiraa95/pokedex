@@ -1,9 +1,9 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PokemonService } from '../../services/pokemon.service';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
-import { PokemonListComponent } from '../pokemon-list/pokemon-list.component';
+import { PokemonListComponent } from './pokemon-list.component';
 
 describe('PokemonListComponent', () => {
   let component: PokemonListComponent;

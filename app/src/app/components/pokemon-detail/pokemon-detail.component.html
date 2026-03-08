@@ -95,11 +95,17 @@
 
 @if ((!pokemon && (isLoading$ | async) === false || (error$ | async))) {
   <div class="container-sm py-5">
-    <div class="text-center text-muted">Pokemon not found.</div>
-    <div class="text-center mt-3">
-      <button class="btn btn-light border" (click)="goBack()"><i class="bi bi-chevron-left"></i>Go Back</button>
-    </div>
-  </div>
+        <div class="card">
+          <div class="card-body text-center">
+            <div class="text-center text-muted">Pokemon not found.</div>
+            <div class="text-center mt-3">
+              <button class="btn btn-light border" (click)="goBack()">
+                <i class="bi bi-chevron-left"></i>Go Back
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 }
 
 @if (isLoading$ | async) {

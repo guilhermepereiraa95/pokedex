@@ -33,6 +33,8 @@
           <div
             class="card h-100 cursor-pointer pokemon-card-hover"
             (click)="viewDetails(pokemon)"
+            (keyup)="viewDetails(pokemon)"
+            tabindex="0"
           >
             <img
               [src]="pokemon.sprite"
@@ -66,7 +68,18 @@
     }
 
     @if ((displayList$ | async)?.length === 0) {
-      <div class="text-center py-5 text-muted">No Pokémon found.</div>
+      <div class="container-sm py-5">
+        <div class="card">
+          <div class="card-body text-center">
+            <div class="text-center text-muted">Pokemon not found.</div>
+            <div class="text-center mt-3">
+              <button class="btn btn-light border" (click)="resetList()">
+                <i class="bi bi-chevron-left"></i>Go Back
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     }
   }
 </div>

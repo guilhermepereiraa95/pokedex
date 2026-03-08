@@ -97,6 +97,7 @@ export class PokemonListComponent implements OnInit, OnDestroy {
   }
 
   resetList(): void {
+    this.isLoadingSubject.next(true);
     this.offset = 0;
     this.pokemonListSubject.next([]);
     this.searchControl.reset();

@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { PokemonService } from '../../services/pokemon.service';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
@@ -31,20 +31,43 @@ describe('PokemonListComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-
-  it('deve carregar a lista inicial no ngOnInit', () => {
+it('should load the initial list on ngOnInit', () => {
     expect(pokemonServiceMock.getPokemonList).toHaveBeenCalled();
   });
 
-  it('deve navegar para detalhes ao chamar viewDetails', () => {
+  it('should navigate to details when calling viewDetails', () => {
     const mockPoke = { name: 'mew' } as PokemonDetail;
     component.viewDetails(mockPoke);
     expect(routerMock.navigate).toHaveBeenCalledWith(['/details', 'mew']);
   });
 
-  it('deve resetar a lista corretamente', () => {
+  it('should reset the list correctly', () => {
     component.resetList();
     expect(component.searchControl.value).toBe(null);
     expect(pokemonServiceMock.getPokemonList).toHaveBeenCalled();
   });
+
+  it('should return the correct color for an existing pokemon type', () => {
+    const color = component.getPokemonTypeColor('fire');
+    expect(color).not.toBe('#999999');
+  });
+
+  it('should return the default color for a non-existent type', () => {
+    const color = component.getPokemonTypeColor('non-existent-type');
+    expect(color).toBe('#999999');
+  });
+
+  it('should emit the current list if the search term is empty on initialization', fakeAsync(() => {
+    const initialList = { results: [{ name: 'pikachu' }] };
+    (pokemonServiceMock.getPokemonList as jest.Mock).mockReturnValue(of(initialList));
+    component.loadPokemonList();
+
+    component.searchControl.setValue('');
+    tick(500);
+
+    component.displayList$.subscribe(list => {
+      expect(list.length).toBe(1);
+      expect(list[0].name).toBe('pikachu');
+    });
+  }));
 });

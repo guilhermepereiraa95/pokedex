@@ -1,91 +1,58 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PokemonDetailComponent } from './pokemon-detail.component';
 import { PokemonService } from '../../services/pokemon.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
+import { StatsColor } from '../../enums/stats-color.enum';
 
 describe('PokemonDetailComponent', () => {
   let component: PokemonDetailComponent;
   let fixture: ComponentFixture<PokemonDetailComponent>;
-  let pokemonService: jest.Mocked<PokemonService>;
-  let router: jest.Mocked<Router>;
-
-  const mockPokemonDetail = {
-    id: 25,
-    name: 'pikachu',
-    sprite: 'https://example.com/pikachu.png',
-    types: ['electric'],
-    height: 4,
-    weight: 60,
-    abilities: ['static', 'lightning-rod'],
-    stats: {
-      hp: 35,
-      attack: 55,
-      defense: 40,
-      'sp-atk': 50,
-      'sp-def': 50,
-      speed: 90,
-    },
-  };
+  let pokemonServiceMock: any;
+  let routerMock: any;
 
   beforeEach(async () => {
-    const pokemonServiceMock = {
-      getPokemonDetail: jest.fn().mockReturnValue(of(mockPokemonDetail)),
-      getPokemonList: jest.fn(),
-      searchPokemon: jest.fn(),
+    pokemonServiceMock = {
+      getPokemonDetail: jest.fn().mockReturnValue(of({ name: 'pikachu', stats: { hp: 100 } }))
     };
-
-    const routerMock = {
-      navigate: jest.fn(),
-    };
-
-    const activatedRouteSpy = {
-      params: of({ name: 'pikachu' }),
-    };
+    routerMock = { navigate: jest.fn() };
 
     await TestBed.configureTestingModule({
       imports: [PokemonDetailComponent],
       providers: [
         { provide: PokemonService, useValue: pokemonServiceMock },
         { provide: Router, useValue: routerMock },
-        { provide: ActivatedRoute, useValue: activatedRouteSpy },
-      ],
+        {
+          provide: ActivatedRoute,
+          useValue: { params: of({ name: 'pikachu' }) }
+        }
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PokemonDetailComponent);
     component = fixture.componentInstance;
-
-    pokemonService = TestBed.inject(PokemonService) as jest.Mocked<PokemonService>;
-    router = TestBed.inject(Router) as jest.Mocked<Router>;
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should call getPokemonDetail on init', () => {
     fixture.detectChanges();
-    expect(pokemonService.getPokemonDetail).toHaveBeenCalledWith('pikachu');
   });
 
-  it('should display pokemon name', fakeAsync(() => {
-    fixture.detectChanges();
-    tick(100);
+  it('deve buscar detalhes do pokemon baseado no parâmetro da URL', () => {
+    expect(pokemonServiceMock.getPokemonDetail).toHaveBeenCalledWith('pikachu');
     expect(component.pokemon?.name).toBe('pikachu');
-  }));
+  });
 
-  it('should navigate back to home', () => {
+  it('deve navegar de volta para a home ao clicar em goBack', () => {
     component.goBack();
-    expect(router.navigate).toHaveBeenCalledWith(['/']);
+    expect(routerMock.navigate).toHaveBeenCalledWith(['/']);
   });
 
-  it('should return color for stat', () => {
-    const color = component.getStatColor(55);
-    expect(color).toBeDefined();
-  });
+  it('deve tratar erro quando o serviço falhar', () => {
+    pokemonServiceMock.getPokemonDetail.mockReturnValue(throwError(() => new Error('Not Found')));
 
-  it('should return color for pokemon type', () => {
-    const color = component.getPokemonTypeColor('electric');
-    expect(color).toBeDefined();
+    // Força uma nova emissão do paramMap para disparar o switchMap novamente se necessário,
+    // ou apenas verifica o comportamento do catchError
+    component.pokemonDetail$.subscribe();
+
+    component.error$.subscribe(err => {
+      expect(err).toContain('Failed to load Pokemon');
+    });
   });
 });

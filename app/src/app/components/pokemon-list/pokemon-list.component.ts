@@ -18,7 +18,7 @@ import {
 } from 'rxjs/operators';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { PokemonService } from '../../services/pokemon.service';
-import { Pokemon } from '../../interfaces/pokemon.types';
+import { Pokemon } from '../../interfaces/pokemon.interface';
 import { POKEMON_TYPE_COLORS } from '../../enums/pokemon-types.enum';
 
 @Component({

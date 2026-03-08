@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import axios from "axios";
-import { Pokemon, PokemonDetail } from "../interface/pokemon.types";
+import { Pokemon, PokemonDetail } from "../interface/pokemon.interface";
 
 const POKEAPI_URL = "https://pokeapi.co/api/v2";
 

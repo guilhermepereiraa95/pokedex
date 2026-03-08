@@ -2,7 +2,7 @@ import { Component, OnDestroy, ChangeDetectionStrategy, OnInit, inject } from "@
 import { ActivatedRoute, Router } from "@angular/router";
 import { CommonModule } from "@angular/common";
 import { PokemonService } from "../../services/pokemon.service";
-import { PokemonDetail } from "../../interfaces/pokemon.types";
+import { PokemonDetail } from "../../interfaces/pokemon.interface";
 import {
   BehaviorSubject,
   Observable,

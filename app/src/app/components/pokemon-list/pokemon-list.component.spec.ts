@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { of } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PokemonListComponent } from './pokemon-list.component';
-import { PokemonDetail } from '../../interfaces/pokemon.types';
+import { PokemonDetail } from '../../interfaces/pokemon.interface';
 
 describe('PokemonListComponent', () => {
   let component: PokemonListComponent;
